@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project CUT-IN | 個性が交差する。その一瞬を創る。 — Collaborative PV Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27', // 落ち着いたチャコールネイビー
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E', // 品のある落ち着いたスチールブルー
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+
+        /* 建築的で繊細なドットグリッド */
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+
+        /* CUT-INを象徴する控えめで洗練された斜めカット */
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 斜めカットイン・スライドホバーエフェクト */
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+
+        /* スクロール出現アニメーション */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* カスタムスクロールバー */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F8FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2B4C7E;
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. クリーン・固定ヘッダー
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <!-- ロゴ（斜めスラッシュモチーフ付き） -->
+            <a href="#" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="#mission" class="hover:text-brand transition-colors py-1">MISSION</a>
+                <a href="#news" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="#works" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="#comment" class="hover:text-brand transition-colors py-1">COMMENT</a>
+                <a href="#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="#join" class="hover:text-brand transition-colors py-1">JOIN US</a>
+                <a href="#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-ink-900 hover:text-brand focus:outline-none" aria-label="メニューを開く">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- モバイルドロップダウンメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-3.5 text-xs font-bold tracking-widest">
+            <a href="#mission" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">01. MISSION</a>
+            <a href="#news" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">02. NEWS</a>
+            <a href="#works" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">03. WORKS</a>
+            <a href="#comment" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">04. COMMENT</a>
+            <a href="#flow" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">05. FLOW</a>
+            <a href="#join" class="block py-1.5 text-ink-700 hover:text-brand mobile-link">06. JOIN US</a>
+            <a href="#join" class="block py-3 text-center bg-brand text-white cut-btn mobile-link mt-2">ENTRY / 合作に参加する</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. ヒーローセクション（落ち着いたスタジオトーン＋斜めカットインCanvas）
+    =========================================== -->
+    <section class="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-surface-white">
+        <!-- 右側の控えめな斜め建築レイヤー -->
+        <div class="hidden lg:block absolute top-0 right-0 w-[47%] h-full bg-surface-off border-l border-slate-200/80" style="clip-path: polygon(14% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+                
+                <!-- 左カラム：誠実で重厚なタイポグラフィ -->
+                <div class="lg:col-span-6 space-y-7">
+                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-brand-light border border-slate-200 text-brand font-mono text-[11px] font-semibold tracking-[0.16em]">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                        <span>COLLABORATIVE PV PRODUCTION</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-black text-ink-900 leading-[1.2] tracking-tight">
+                            1秒で、<br>
+                            <span class="text-brand relative inline-block">
+                                視線を奪う。
+                                <span class="block h-[3px] w-full bg-brand/20 mt-1.5"></span>
+                            </span>
+                        </h1>
+                        <p class="text-lg sm:text-xl font-bold text-ink-700 tracking-wide pt-1">
+                            個性が交差する、その一瞬を創る。
+                        </p>
+                    </div>
+
+                    <p class="text-ink-500 text-sm sm:text-[15px] leading-[2] max-w-lg">
+                        それぞれの個性をぶつけ合う。<br>
+                        皆それぞれの考えがあっていい。<br>
+                        クリエーター魂を燃やせる場所を。<br>
+                        Project CUT-INはそういう場所でありたい。
+                    </p>
+
+                    <!-- CTAボタン -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#works" class="px-8 py-4 bg-brand text-white font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn btn-cut-hover flex items-center justify-center gap-3 shadow-sm">
+                            <span>VIEW WORKS / 作品を見る</span>
+                            <span class="font-mono">→</span>
+                        </a>
+                        <a href="#join" class="px-8 py-4 bg-white border border-slate-300 hover:border-ink-900 text-ink-900 font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn transition-all flex items-center justify-center gap-3">
+                            <span>ENTRY / 合作に参加する</span>
+                        </a>
+                    </div>
+
+                    <!-- スタジオ実績サマリー -->
+                    <div class="pt-7 border-t border-slate-200/90 grid grid-cols-3 gap-6 max-w-md">
+                        <div>
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">12<span class="text-brand text-base ml-0.5">+</span></div>
+                            <div class="text-[11px] font-medium text-ink-500 mt-1">公開PVプロジェクト</div>
+                        </div>
+                        <div>
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">85<span class="text-brand text-base ml-0.5">+</span></div>
+                            <div class="text-[11px] font-medium text-ink-500 mt-1">参加クリエイター数</div>
+                        </div>
+                        <div>
+                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">60<span class="text-brand text-xs ml-1">FPS</span></div>
+                            <div class="text-[11px] font-medium text-ink-500 mt-1">高精細タイムライン</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右カラム：斜めフレームカット＆洗練されたモーショングラフィックCanvas -->
+                <div class="lg:col-span-6">
+                    <div class="relative w-full aspect-[4/3] bg-white border border-slate-200 shadow-lg shadow-slate-200/50 cut-card overflow-hidden">
+                        <canvas id="hero-cutin-canvas" class="w-full h-full block cursor-pointer"></canvas>
+
+                        <!-- オーバーレイUI（タイムコード＆シーン切り替え表示） -->
+                        <!-- 右カラム：UIなし自動再生ループ動画 -->
+                        <div class="lg:col-span-6">
+                            <div class="relative w-full aspect-[4/3] bg-ink-900 border border-slate-200 shadow-lg shadow-slate-200/50 cut-card overflow-hidden">
+                            <video src="hero-pv.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none"></video>
+                            </div>
+                        </div>
+
+                        <div class="absolute bottom-4 left-5 right-5 flex items-center justify-between font-mono text-[10px] text-ink-500 pointer-events-none">
+                            <span class="bg-white/95 px-2.5 py-1 border border-slate-200 tracking-wider">CLICK TO SWITCH CUT</span>
+                            <span id="hero-scene-label" class="bg-ink-900 text-white px-2.5 py-1 font-semibold tracking-wider">SCENE A // MOTION</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. MISSION / ABOUTセクション
+    =========================================== -->
+    <section id="mission" class="py-28 bg-surface-off border-t border-slate-200/80 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- セクションヘッダー -->
+            <div class="max-w-3xl mb-16 reveal-up">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>01 / MISSION & ABOUT</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-ink-900 tracking-tight leading-[1.18] mb-6">
+                    Break the Frame,<br>
+                    <span class="text-brand">Make the Spark.</span>
+                </h2>
+                <p class="text-ink-500 text-sm sm:text-base leading-[1.95]">
+                    Project CUT-INは、「それぞれの表現を尊重し、合わせることで最高のPVにする」ことをミッションに掲げるPV合作制作スタジオです。単なるパートの集合ではなく、1本の映像作品としての完成度と、クリエイター同士が刺激し合える誠実な制作環境を追求しています。
+                </p>
+            </div>
+
+            <!-- 3つのコアバリュー -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+                <!-- Value 01 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-9 cut-card hover:border-brand/40 hover:shadow-md transition-all duration-300 reveal-up">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-[11px] font-bold text-brand bg-brand-light px-3 py-1 tracking-wider">VALUE 01</span>
+                        <span class="font-mono text-xs font-semibold text-ink-300">/01</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-ink-900 tracking-tight mb-1">
+                        CROSSOVER
+                    </h3>
+                    <div class="text-xs font-bold text-brand mb-4">個性の交差</div>
+                    <p class="text-ink-500 text-sm leading-[1.9]">
+                        手描きイラスト、モーショングラフィックス、3DCG、リミックス音源。異なる専門領域を持つクリエイターが同じタイムライン上で交わり、一人では到達できない表現を生み出します。
+                    </p>
+                </div>
+
+                <!-- Value 02 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-9 cut-card hover:border-brand/40 hover:shadow-md transition-all duration-300 reveal-up" style="transition-delay: 100ms;">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-[11px] font-bold text-brand bg-brand-light px-3 py-1 tracking-wider">VALUE 02</span>
+                        <span class="font-mono text-xs font-semibold text-ink-300">/02</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-ink-900 tracking-tight mb-1">
+                        SEAMLESS CUT
+                    </h3>
+                    <div class="text-xs font-bold text-brand mb-4">繋ぎの美学</div>
+                    <p class="text-ink-500 text-sm leading-[1.9]">
+                        「次のパートが、待ちきれなくなるPVを。」<br>
+                        パートが切り替わる1秒のカットイン演出と、前後のクリエイターによる緻密なバトンパスにこだわり、視聴者の視線を惹きつけ続けます。
+                    </p>
+                </div>
+
+                <!-- Value 03 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-9 cut-card hover:border-brand/40 hover:shadow-md transition-all duration-300 reveal-up" style="transition-delay: 200ms;">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="font-mono text-[11px] font-bold text-brand bg-brand-light px-3 py-1 tracking-wider">VALUE 03</span>
+                        <span class="font-mono text-xs font-semibold text-ink-300">/03</span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-ink-900 tracking-tight mb-1">
+                        CREATIVE STUDIO
+                    </h3>
+                    <div class="text-xs font-bold text-brand mb-4">制作チームとしての誠実さ</div>
+                    <p class="text-ink-500 text-sm leading-[1.9]">
+                        明確なスケジュール管理、レギュレーションの整備、適切なクレジット表記と権利配慮。初めて合作に参加するクリエイターも安心して制作に没頭できる体制を整えています。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. NEWSセクション（お知らせ・活動報告）※新規追加
+    =========================================== -->
+    <section id="news" class="py-28 bg-surface-white border-t border-slate-200/80 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 reveal-up">
+                <div>
+                    <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                        <span class="w-6 h-[1.5px] bg-brand"></span>
+                        <span>02 / NEWS & UPDATES</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                        NEWS <span class="text-ink-500 text-base sm:text-lg font-bold ml-2">/ お知らせ・活動報告</span>
+                    </h2>
+                </div>
+
+                <!-- カテゴリーフィルター -->
+                <div class="flex flex-wrap gap-2" id="news-filter-container">
+                    <button type="button" data-news-filter="all" class="news-filter-btn active px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-ink-900 text-white cut-btn">
+                        ALL
+                    </button>
+                    <button type="button" data-news-filter="RELEASE" class="news-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        RELEASE
+                    </button>
+                    <button type="button" data-news-filter="RECRUIT" class="news-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        RECRUIT
+                    </button>
+                    <button type="button" data-news-filter="INFO" class="news-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        INFO
+                    </button>
+                </div>
+            </div>
+
+            <!-- ニュースリスト（建築的な水平ラインとホバー演出） -->
+            <div id="news-list" class="border-t border-slate-200 divide-y divide-slate-200 reveal-up">
+                <!-- JSで動的生成 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         5. WORKSセクション（作品アーカイブ）
+    =========================================== -->
+    <section id="works" class="py-28 bg-surface-off border-t border-slate-200/80 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- ヘッダー & ジャンルフィルター -->
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-14 gap-6 reveal-up">
+                <div>
+                    <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                        <span class="w-6 h-[1.5px] bg-brand"></span>
+                        <span>03 / WORKS ARCHIVE</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                        WORKS <span class="text-ink-500 text-base sm:text-lg font-bold ml-2">/ 制作実績・合作アーカイブ</span>
+                    </h2>
+                </div>
+
+                <!-- ジャンルフィルタータブ -->
+                <div class="flex flex-wrap gap-2" id="filter-container">
+                    <button data-filter="all" class="filter-btn active px-4 py-2 text-xs font-mono font-bold tracking-wider bg-ink-900 text-white cut-btn">
+                        ALL
+                    </button>
+                    <button data-filter="long" class="filter-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-white border border-slate-200 text-ink-700 hover:border-brand cut-btn">
+                        LONG PV
+                    </button>
+                    <button data-filter="shorts" class="filter-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-white border border-slate-200 text-ink-700 hover:border-brand cut-btn">
+                        SHORTS
+                    </button>
+                </div>
+            </div>
+
+            <!-- 作品カードグリッド（JSで動的生成） -->
+            <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- JavaScriptによってカードが生成されます -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         6. COMMENTセクション（運営・参加クリエイターコメント）※新規追加
+    =========================================== -->
+    <section id="comment" class="py-28 bg-surface-white border-t border-slate-200/80 relative">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+        <div class="max-w-3xl mb-14 reveal-up">
+            <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                <span class="w-6 h-[1.5px] bg-brand"></span>
+                <span>04 / FOUNDER'S MESSAGE</span>
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                COMMENT <span class="text-ink-500 text-base sm:text-lg font-bold ml-2">/ 創立者の声</span>
+            </h2>
+        </div>
+
+        <!-- 創立者メッセージカード -->
+        <div class="bg-surface-off border border-slate-200/90 p-8 sm:p-12 cut-card reveal-up">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8">
+                    <div class="inline-block font-mono text-[10px] font-bold text-white bg-ink-900 px-3 py-1 tracking-widest mb-3">
+                        FOUNDER / REPRESENTATIVE
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight">
+                        創立者名（例：KAI）
+                    </div>
+                    <div class="font-mono text-xs text-brand font-semibold mt-1.5">
+                        Project CUT-IN 創立者・代表
+                    </div>
+                </div>
+                <div class="lg:col-span-8 space-y-4">
+                    <p class="text-ink-900 text-lg sm:text-xl font-bold leading-[1.8]">
+                        「それぞれの個性をぶつけ合い、クリエーター魂を燃やせる場所を創りたい。」
+                    </p>
+                    <p class="text-ink-500 text-sm sm:text-[15px] leading-[2]">
+                        一人で作品を作ることも素晴らしいですが、異なる感性を持つクリエイター同士が同じ1本のタイムライン上で交差したとき、想像もしなかった熱量と化学反応が生まれます。<br>
+                        皆それぞれの考えや表現があっていい。互いの個性を尊重しながら、視聴者の視線を1秒で奪うような最高の合作をこの場所から発信していきます。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- ==========================================
+         7. FLOWセクション（合作の進め方）
+    =========================================== -->
+    <section id="flow" class="py-28 bg-surface-off border-t border-slate-200/80 relative bg-studio-dots">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="mb-14 reveal-up">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>05 / PRODUCTION FLOW</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    FLOW <span class="text-ink-500 text-base sm:text-lg font-bold ml-2">/ 合作制作の進め方</span>
+                </h2>
+                <p class="mt-4 text-ink-500 max-w-2xl text-sm sm:text-base leading-relaxed">
+                    企画立案からプレミア公開まで、明確な5つのステップで進行します。各ステップを選択すると、具体的な進行内容や使用ツールを確認できます。
+                </p>
+            </div>
+
+            <!-- インタラクティブ・ステップUI -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start reveal-up">
+                <!-- 左側：5ステップ選択リスト -->
+                <div class="lg:col-span-5 space-y-3" id="flow-step-list">
+                    <!-- JSで生成 -->
+                </div>
+
+                <!-- 右側：選択中のステップ詳細パネル -->
+                <div class="lg:col-span-7 bg-white border border-slate-200/90 p-8 sm:p-10 cut-card shadow-sm" id="flow-detail-panel">
+                    <!-- JSで動的に描画 -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         8. JOIN US / ENTRYセクション（メンバー募集＆応募フォーム）
+    =========================================== -->
+    <section id="join" class="py-28 bg-surface-white border-t border-slate-200/80 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="mb-14 reveal-up">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>06 / JOIN US & ENTRY</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    JOIN US <span class="text-ink-500 text-base sm:text-lg font-bold ml-2">/ クリエイター募集・エントリー</span>
+                </h2>
+                <p class="mt-4 text-ink-500 max-w-2xl text-sm sm:text-base leading-relaxed">
+                    Project CUT-INでは、次回制作予定の合作PVに参加するクリエイターを募集しています。希望パートの要項をご確認のうえ、フォームよりご応募ください。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <!-- 左側：募集パートタブ＆募集要項 -->
+                <div class="lg:col-span-6 space-y-6 reveal-up">
+                    <div class="font-mono text-xs font-bold text-ink-700 tracking-wider">
+                        SELECT ROLE / 募集パート一覧
+                    </div>
+
+                    <!-- パート選択タブ -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="role-tabs">
+                        <button type="button" data-role="motion" class="role-tab active py-3 px-2 text-xs font-mono font-bold tracking-wider bg-brand text-white cut-btn text-center">
+                            MOTION
+                        </button>
+                        <button type="button" data-role="illustrator" class="role-tab py-3 px-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn text-center">
+                            ILLUSTRATOR
+                        </button>
+                        <button type="button" data-role="sound" class="role-tab py-3 px-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn text-center">
+                            SOUND & MIX
+                        </button>
+                        <button type="button" data-role="compositor" class="role-tab py-3 px-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn text-center">
+                            COMPOSITOR
+                        </button>
+                    </div>
+
+                    <!-- パート詳細ボックス -->
+                    <div id="role-detail-box" class="bg-surface-off border border-slate-200/90 p-7 sm:p-8 cut-card min-h-[310px] flex flex-col justify-between">
+                        <!-- JSで内容が切り替わります -->
+                    </div>
+                </div>
+
+                <!-- 右側：エントリーフォーム（Googleフォーム案内） -->
+<div class="lg:col-span-6 reveal-up" style="transition-delay: 120ms;">
+    <div class="bg-white border border-slate-200/90 p-7 sm:p-9 cut-card shadow-lg shadow-slate-200/40 w-full">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <h3 class="text-base font-extrabold tracking-wide text-ink-900">
+                ENTRY / 参加応募について
+            </h3>
+            <span class="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold text-brand bg-brand-light px-2.5 py-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                OPEN
+            </span>
+        </div>
+
+        <div class="space-y-6 w-full">
+            <p class="text-sm text-ink-500 leading-[1.9]">
+                エントリーは専用のGoogleフォームにて受け付けております。下記の必要事項をご準備のうえ、フォームよりご送信ください。
+            </p>
+
+            <!-- フォーム入力項目チェックリスト -->
+            <div class="bg-surface-off border border-slate-200/90 p-5 space-y-2.5 w-full">
+                <div class="font-mono text-[11px] font-bold text-ink-700 tracking-wider">
+                    REQUIRED ITEMS / Googleフォームでの入力項目
+                </div>
+                <ul class="text-xs sm:text-sm text-ink-700 space-y-2 list-disc list-inside">
+                    <li>お名前・活動名（クレジット表記名）</li>
+                    <li>希望パート（MOTION / ILLUSTRATOR / SOUND / COMPOSITOR）</li>
+                    <li>ポートフォリオ・過去作品のURL</li>
+                    <li>連絡用SNS ID（X または Discord）</li>
+                </ul>
+            </div>
+
+            <!-- Googleフォーム起動ボタン -->
+            <div class="pt-2 space-y-3 w-full">
+                <a href="https://forms.gle/wWPWenD163rqLPi5A" target="_blank" rel="noopener noreferrer"
+                   class="w-full py-4 bg-brand text-white font-bold tracking-[0.14em] text-xs sm:text-sm cut-btn btn-cut-hover shadow-sm flex items-center justify-center gap-3 text-center">
+                    <span>OPEN GOOGLE FORM / 応募フォームを開く</span>
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                </a>
+                <p class="font-mono text-[11px] text-ink-500 text-center">
+                    ※外部サイト（Google Forms）が新しいタブで開きます
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         9. シンプル＆洗練されたフッター
+    =========================================== -->
+    <footer class="bg-surface-off border-t border-slate-200/80 py-14">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                <!-- ブランドロゴ・タグライン -->
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-6 h-6 bg-ink-900 flex items-center justify-center cut-btn">
+                            <div class="w-[2px] h-7 bg-brand-accent rotate-[28deg]"></div>
+                            <div class="w-[1.5px] h-7 bg-white rotate-[28deg] ml-0.5"></div>
+                        </div>
+                        <span class="font-extrabold tracking-tight text-lg text-ink-900">
+                            Project <span class="text-brand">CUT-IN</span>
+                        </span>
+                    </div>
+                    <p class="text-xs font-medium text-ink-500 mt-2">
+                        個性が交差する。その一瞬を創る。
+                    </p>
+                </div>
+
+                <!-- フッターナビ＆SNS -->
+                <div class="flex flex-wrap items-center gap-6 text-xs font-bold text-ink-700">
+                    <a href="#mission" class="hover:text-brand transition-colors">MISSION</a>
+                    <a href="#news" class="hover:text-brand transition-colors">NEWS</a>
+                    <a href="#works" class="hover:text-brand transition-colors">WORKS</a>
+                    <a href="#comment" class="hover:text-brand transition-colors">COMMENT</a>
+                    <a href="#flow" class="hover:text-brand transition-colors">FLOW</a>
+                    <a href="#join" class="hover:text-brand transition-colors">JOIN US</a>
+                    <div class="h-4 w-[1px] bg-slate-300 hidden sm:block"></div>
+                    <div class="flex items-center gap-2.5">
+                        <a href="#works" aria-label="X" class="w-8 h-8 bg-white border border-slate-200 hover:border-brand text-ink-700 hover:text-brand flex items-center justify-center transition-colors">
+                            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#works" aria-label="YouTube" class="w-8 h-8 bg-white border border-slate-200 hover:border-brand text-ink-700 hover:text-brand flex items-center justify-center transition-colors">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-2">
+                <p>&copy; 2026 Project CUT-IN.</p>
+                <p>COLLABORATIVE PV STUDIO // AICHI</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         作品詳細モーダル（WORKSカードクリック時に表示）
+    =========================================== -->
+    <div id="work-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
+        <div class="bg-white border border-slate-200 w-full max-w-3xl max-h-[90vh] overflow-y-auto cut-card shadow-2xl relative">
+            <div class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand">
+                    <span id="modal-year">2026</span>
+                    <span class="text-slate-300">/</span>
+                    <span id="modal-category-badge">MOTION GRAPHICS</span>
+                </div>
+                <button id="close-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- YouTube動画埋め込みエリア -->
+            <div class="relative w-full aspect-video bg-ink-950 border border-slate-200 overflow-hidden">
+            <iframe id="modal-youtube-iframe" class="w-full h-full" src="about:blank" title="YouTube video player" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <!-- タイトル・解説 -->
+            <div>
+                <h3 id="modal-title" class="text-2xl font-extrabold text-ink-900 tracking-tight mb-1.5">作品タイトル</h3>
+                <p id="modal-song" class="font-mono text-xs font-semibold text-brand mb-4">使用楽曲</p>
+                <p id="modal-desc" class="text-ink-500 text-sm leading-[1.9]">解説文</p>
+            </div>
+
+            <!-- 制作情報・担当スタッフ（箇条書き） -->
+            <div class="bg-surface-off p-6 border border-slate-200/90">
+                <h4 class="font-mono text-xs font-bold text-ink-900 tracking-wider mb-4 border-b border-slate-200 pb-2">
+                    PRODUCTION DETAILS / 制作データ・担当スタッフ
+                </h4>
+            <ul id="modal-details-list" class="space-y-2.5 text-sm text-ink-700 list-disc list-inside">
+                <!-- JSで箇条書きが生成されます -->
+            </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         NEWS詳細モーダル（NEWS記事クリック時に表示）※新規追加
+    =========================================== -->
+    <div id="news-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
+        <div class="bg-white border border-slate-200 w-full max-w-2xl cut-card shadow-2xl relative overflow-hidden">
+            <div class="bg-surface-off border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold">
+                    <span id="news-modal-date" class="text-ink-500">2026.11.15</span>
+                    <span id="news-modal-cat" class="px-2.5 py-0.5 bg-brand text-white text-[10px]">RECRUIT</span>
+                </div>
+                <button id="close-news-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8 space-y-5">
+                <h3 id="news-modal-title" class="text-xl sm:text-2xl font-extrabold text-ink-900 leading-snug">
+                    ニュースタイトル
+                </h3>
+                <div class="h-[1px] w-full bg-slate-200"></div>
+                <p id="news-modal-body" class="text-ink-700 text-sm leading-[2] whitespace-pre-line">
+                    ニュース本文
+                </p>
+                <div class="pt-4 flex justify-end">
+                    <button type="button" id="news-modal-ok-btn" class="px-6 py-2.5 bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-brand transition-colors">
+                        CLOSE / 閉じる
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JavaScript（インタラクション・Canvas演出・データ管理）
+    =========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 2. モバイルメニュー開閉
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+
+            // 3. スクロール出現アニメーション
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 4. NEWSセクションデータ＆インタラクション（※新規追加）
+            const newsData = [
+                {
+                    id: 101,
+                    date: "2026.11.15",
+                    category: "RECRUIT",
+                    title: "2026年冬期大型PV合作『HORIZON // 境界線』参加クリエイター募集を開始しました",
+                    body: "Project CUT-INでは、2027年春の公開に向けた大型PV合作プロジェクト『HORIZON // 境界線』の参加クリエイター募集を開始いたしました。\n\n募集パートは「MOTION DESIGNER」「ILLUSTRATOR」「SOUND & MIX」「COMPOSITOR」の4部門です。合作への参加が初めての方も、運営ディレクターがレギュレーションやパート間の繋ぎ演出を丁寧にサポートいたします。ページ下部のENTRY FORMよりご応募ください。"
+                },
+                {
+                    id: 102,
+                    date: "2026.10.28",
+                    category: "RELEASE",
+                    title: "合作PV『OVERDRIVE // 境界線突破PV』がYouTube・niconico合計48万回再生を突破",
+                    body: "総勢14名のモーショングラフィッカーが参加した合作PV『OVERDRIVE // 境界線突破PV』が、公開から3ヶ月で累計48万回再生を突破いたしました。\n\nご視聴・コメントをお寄せいただいた皆様、ならびにご協力いただいた楽曲制作チームに心より感謝申し上げます。各クリエイターの担当パート構成は「WORKS」セクションのタイムライン詳細からご覧いただけます。"
+                },
+                {
+                    id: 103,
+                    date: "2026.09.12",
+                    category: "INFO",
+                    title: "Project CUT-IN 公式Webサイトをリニューアル＆制作レギュレーションを公開",
+                    body: "より多くのクリエイターと視聴者の皆様にプロジェクトの理念や制作プロセスを知っていただくため、公式Webサイトを全面リニューアルいたしました。\n\nあわせて、合作制作における標準フレームレート（60fps）や提出フォーマット、クレジット表記ポリシーをまとめた制作ガイドラインも刷新しております。"
+                },
+                {
+                    id: 104,
+                    date: "2026.08.04",
+                    category: "RELEASE",
+                    title: "手描きアニメーション合作『夜明けのエンドロール』プレミア公開のお知らせ",
+                    body: "絵師12名・動画師6名の計18名で制作したストーリー仕立ての手描きPV合作『夜明けのエンドロール』をプレミア公開いたしました。\n\nキャラクターの視線や小物の動きを次のパートへと受け渡す、繊細なカットイン演出をぜひお楽しみください。"
+                }
+            ];
+
+            const newsListEl = document.getElementById('news-list');
+            const newsFilterBtns = document.querySelectorAll('.news-filter-btn');
+            const newsModal = document.getElementById('news-modal');
+            const closeNewsModalBtn = document.getElementById('close-news-modal-btn');
+            const newsModalOkBtn = document.getElementById('news-modal-ok-btn');
+
+            function renderNews(filter = 'all') {
+                newsListEl.innerHTML = '';
+                const items = filter === 'all' ? newsData : newsData.filter(n => n.category === filter);
+
+                items.forEach(item => {
+                    const row = document.createElement('article');
+                    row.className = 'py-5 sm:py-6 px-3 hover:bg-surface-off transition-colors cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6';
+                    
+                    const badgeStyle = item.category === 'RECRUIT'
+                        ? 'bg-brand text-white'
+                        : item.category === 'RELEASE'
+                        ? 'bg-ink-900 text-white'
+                        : 'bg-surface-subtle text-ink-700';
+
+                    row.innerHTML = `
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-5">
+                            <div class="flex items-center gap-3 shrink-0">
+                                <time class="font-mono text-xs font-semibold text-ink-500">${item.date}</time>
+                                <span class="font-mono text-[10px] font-bold px-2.5 py-0.5 tracking-wider ${badgeStyle}">
+                                    ${item.category}
+                                </span>
+                            </div>
+                            <h3 class="text-sm sm:text-[15px] font-bold text-ink-900 group-hover:text-brand transition-colors">
+                                ${item.title}
+                            </h3>
+                        </div>
+                        <span class="font-mono text-xs font-bold text-ink-300 group-hover:text-brand group-hover:translate-x-1 transition-all shrink-0 self-end sm:self-center">
+                            READ →
+                        </span>
+                    `;
+
+                    row.addEventListener('click', () => {
+                        document.getElementById('news-modal-date').textContent = item.date;
+                        document.getElementById('news-modal-cat').textContent = item.category;
+                        document.getElementById('news-modal-title').textContent = item.title;
+                        document.getElementById('news-modal-body').textContent = item.body;
+                        newsModal.classList.remove('hidden');
+                        newsModal.classList.add('flex');
+                        document.body.style.overflow = 'hidden';
+                    });
+
+                    newsListEl.appendChild(row);
+                });
+            }
+
+            renderNews('all');
+
+            newsFilterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    newsFilterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-ink-900', 'text-white');
+                        b.classList.add('bg-surface-off', 'text-ink-700');
+                    });
+                    btn.classList.add('active', 'bg-ink-900', 'text-white');
+                    btn.classList.remove('bg-surface-off', 'text-ink-700');
+                    renderNews(btn.dataset.newsFilter);
+                });
+            });
+
+            function closeNewsModal() {
+                newsModal.classList.add('hidden');
+                newsModal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+            closeNewsModalBtn.addEventListener('click', closeNewsModal);
+            newsModalOkBtn.addEventListener('click', closeNewsModal);
+            newsModal.addEventListener('click', (e) => {
+                if (e.target === newsModal) closeNewsModal();
+            });
+
+            // 5. 作品アーカイブデータ（YouTube・Shorts/ロング対応）
+const worksData = [
+    {
+        id: 1,
+        year: "2026",
+        title: "OVERDRIVE // 境界線突破PV",
+        category: "long", // "long" または "shorts"
+        categoryLabel: "LONG PV (16:9)",
+        youtubeId: "dQw4w9WgXcQ", // ← ここに実際のYouTube動画IDを入れる
+        duration: "03:45",
+        song: "楽曲：『OVERDRIVE』 / SynthWave Collective",
+        patternType: "slash",
+        desc: "総勢14名のモーショングラフィッカーが集結したハイスピード合作PV。",
+        details: [
+            "制作日：2026年10月15日 公開（制作期間：約6週間）",
+            "企画・ディレクション：KAI",
+            "モーショングラフィックス：Ryo-ta / Mina_MG / VFX_Zero / Aoi / Nagi",
+            "3DCG・背景美術：Sora_3D / Taku",
+            "統合編集・コンポジット：KAI"
+        ]
+    },
+    {
+        id: 2,
+        year: "2026",
+        title: "15秒で撃ち抜くカットインリレー #01",
+        category: "shorts",
+        categoryLabel: "YOUTUBE SHORTS (9:16)",
+        youtubeId: "dQw4w9WgXcQ", // ← ここに実際のShorts動画IDを入れる
+        duration: "00:15",
+        song: "楽曲：『FLASH BEAT』 / CUT-IN Sound",
+        patternType: "bars",
+        desc: "縦型画面（9:16）の狭さを逆手に取り、上下左右から次々とクリエイターの個性が飛び込むショート合作。",
+        details: [
+            "制作日：2026年11月02日 公開（制作期間：2週間）",
+            "企画・進行：KAI",
+            "イラスト制作：朔夜 / ひなた / しらたま",
+            "アニメーション・映像演出：Mina_MG / Noa",
+            "サウンド・効果音調整：DJ_CUT"
+        ]
+    }
+    // 必要に応じて同様の形式で作品を追加
+];
+
+const worksGrid = document.getElementById('works-grid');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+function getCardArtworkSVG(type) {
+    if (type === 'slash') {
+        return `<svg class="w-full h-full" viewBox="0 0 400 225" fill="none"><rect width="400" height="225" fill="#F7F8FA"/><polygon points="240,0 400,0 400,225 160,225" fill="#F0F4FA"/><line x1="240" y1="0" x2="160" y2="225" stroke="#2B4C7E" stroke-width="2"/><rect x="36" y="42" width="120" height="68" stroke="#161C27" stroke-width="1.2" fill="#FFFFFF"/></svg>`;
+    }
+    return `<svg class="w-full h-full" viewBox="0 0 400 225" fill="none"><rect width="400" height="225" fill="#F7F8FA"/><rect x="48" y="65" width="14" height="95" fill="#2B4C7E"/><rect x="76" y="90" width="14" height="70" fill="#94A3B8"/><polygon points="260,0 400,0 400,225 200,225" fill="#161C27"/><line x1="260" y1="0" x2="200" y2="225" stroke="#3B66A5" stroke-width="2.5"/></svg>`;
+}
+
+function renderWorks(filter = 'all') {
+    worksGrid.innerHTML = '';
+    const filtered = filter === 'all' ? worksData : worksData.filter(w => w.category === filter);
+
+    filtered.forEach(work => {
+        const card = document.createElement('div');
+        card.className = 'bg-white border border-slate-200/90 overflow-hidden cut-card hover:shadow-lg hover:border-brand/50 transition-all duration-300 group cursor-pointer flex flex-col justify-between';
+        // YouTubeサムネイルを自動取得（画像がない場合はSVGフォールバック）
+        const thumbUrl = `https://img.youtube.com/vi/${work.youtubeId}/hqdefault.jpg`;
+
+        card.innerHTML = `
+            <div>
+                <div class="relative aspect-video overflow-hidden border-b border-slate-200/80 bg-surface-off">
+                    <img src="${thumbUrl}" alt="${work.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute top-3.5 left-4 right-4 flex items-center justify-between">
+                        <span class="px-2.5 py-1 bg-white/95 backdrop-blur border border-slate-200 font-mono text-[10px] font-bold text-brand tracking-wider">
+                            ${work.categoryLabel}
+                        </span>
+                        <span class="px-2 py-0.5 bg-ink-900 text-white font-mono text-[10px] font-semibold">
+                            ${work.year}
+                        </span>
+                    </div>
+                    <div class="absolute bottom-3 right-4 font-mono text-[10px] font-bold text-ink-700 bg-white/95 px-2 py-0.5 border border-slate-200">
+                        ${work.duration}
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="font-mono text-[11px] font-semibold text-ink-500 mb-1.5 truncate">${work.song}</div>
+                    <h3 class="text-lg font-extrabold text-ink-900 group-hover:text-brand transition-colors mb-2.5">${work.title}</h3>
+                    <p class="text-sm text-ink-500 line-clamp-2 leading-relaxed">${work.desc}</p>
+                </div>
+            </div>
+            <div class="px-6 py-3.5 bg-surface-off border-t border-slate-200/70 flex items-center justify-between font-mono text-[11px] font-bold">
+                <span class="text-ink-700">${work.category === 'shorts' ? 'VERTICAL / SHORTS' : 'WIDESCREEN / LONG'}</span>
+                <span class="text-brand group-hover:translate-x-1 transition-transform">WATCH & DETAILS →</span>
+            </div>
+        `;
+        card.addEventListener('click', () => openWorkModal(work));
+        worksGrid.appendChild(card);
+    });
+}
+
+renderWorks('all');
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+            b.classList.remove('active', 'bg-ink-900', 'text-white');
+            b.classList.add('bg-white', 'border', 'border-slate-200', 'text-ink-700');
+        });
+        btn.classList.add('active', 'bg-ink-900', 'text-white');
+        btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-ink-700');
+        renderWorks(btn.dataset.filter);
+    });
+});
+
+// 6. 作品詳細モーダル制御
+const workModal = document.getElementById('work-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const modalIframe = document.getElementById('modal-youtube-iframe');
+
+function openWorkModal(work) {
+    document.getElementById('modal-year').textContent = work.year;
+    document.getElementById('modal-category-badge').textContent = work.categoryLabel;
+    document.getElementById('modal-title').textContent = work.title;
+    document.getElementById('modal-song').textContent = work.song;
+    document.getElementById('modal-desc').textContent = work.desc;
+
+    // YouTube埋め込みURLをセット（Shortsでも通常プレイヤーでそのまま再生可能）
+    modalIframe.src = `https://www.youtube.com/embed/${work.youtubeId}`;
+
+    // 箇条書きリストを生成
+    const detailsList = document.getElementById('modal-details-list');
+    detailsList.innerHTML = work.details.map(item => `<li>${item}</li>`).join('');
+
+    workModal.classList.remove('hidden');
+    workModal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeWorkModal() {
+    workModal.classList.add('hidden');
+    workModal.classList.remove('flex');
+    modalIframe.src = ''; // モーダルを閉じたら動画再生を停止
+    document.body.style.overflow = '';
+}
+
+closeModalBtn.addEventListener('click', closeWorkModal);
+workModal.addEventListener('click', (e) => {
+    if (e.target === workModal) closeWorkModal();
+});
+
+            // 7. FLOWセクション（合作の進め方）
+            const flowSteps = [
+                {
+                    num: "01",
+                    en: "CONCEPT & PLANNING",
+                    title: "企画・コンセプト策定",
+                    duration: "WEEK 01",
+                    tools: ["Notion", "Discord", "Spotify / DAW"],
+                    summary: "作品の核となるテーマ、使用楽曲、目標クオリティを策定します。",
+                    detail: "運営ディレクターを中心に合作のコンセプトシートを作成。BPMや楽曲構成（イントロ・Aメロ・サビ・落ちサビ等）を分析し、映像全体のトーン＆マナーと目標スケジュールを明確化した上で参加メンバーを募集します。"
+                },
+                {
+                    num: "02",
+                    en: "PART ASSIGNMENT & RULES",
+                    title: "パート割り・レギュレーション共有",
+                    duration: "WEEK 02",
+                    tools: ["Google Sheets", "Frame.io / Discord"],
+                    summary: "希望や得意分野に応じて担当秒数を決定し、制作仕様を統一します。",
+                    detail: "解像度（1920×1080 / 60fps）、カラープロファイル、提出ファイル形式などの技術レギュレーションを共有。さらに隣り合うパートのクリエイター同士で「どのようにカットインで繋ぐか」のトランジション設計を事前にすり合わせます。"
+                },
+                {
+                    num: "03",
+                    en: "PRODUCTION & CHECKPOINT",
+                    title: "各パート制作・中間チェック",
+                    duration: "WEEK 03 - 04",
+                    tools: ["After Effects", "CLIP STUDIO PAINT", "Blender", "YMM4", "AviUtl", "AviUtl2", "CapCut"],
+                    summary: "専用サーバーでWIP（制作途中の映像）を共有し、クオリティを高めます。",
+                    detail: "各自の環境でパート制作を進めつつ、中間チェック日にラフ動画や絵コンテを共有。ディレクターや他メンバーからの建設的なフィードバックを通じて、視線誘導やリズムの同期をブラッシュアップします。"
+                },
+                {
+                    num: "04",
+                    en: "COMPOSITE & MASTERING",
+                    title: "繋ぎ・コンポジット調整",
+                    duration: "WEEK 05",
+                    tools: ["Premiere Pro", "After Effects", "DaVinci Resolve", "YMM4", "AviUtl", "AviUtl2", "CapCut"],
+                    summary: "全パートを1本のタイムラインへ統合し、映像の一体感を仕上げます。",
+                    detail: "提出された全素材をコンポジターがマスタータイムラインに配置。パート間のカットイン演出の補強、全体のカラーグレーディング、音圧・SEの最終調整、そして参加クリエイター全員のエンドロールを制作します。"
+                },
+                {
+                    num: "05",
+                    en: "PREMIERE & ARCHIVE",
+                    title: "プレミア公開・アーカイブ",
+                    duration: "WEEK 06",
+                    tools: ["YouTube", "niconico", "X (Twitter)"],
+                    summary: "各プラットフォームで一斉プレミア公開し、作品を世に送り出します。",
+                    detail: "公開カウントダウンビジュアルやティザー映像の展開を経て、YouTube・niconicoにてプレミア公開を実施。公開後は公式サイトのWORKSアーカイブにタイムライン構成とともに永久保存されます。"
+                }
+            ];
+
+            const flowStepList = document.getElementById('flow-step-list');
+            const flowDetailPanel = document.getElementById('flow-detail-panel');
+            let currentFlowIndex = 0;
+
+            function renderFlow() {
+                flowStepList.innerHTML = '';
+                flowSteps.forEach((step, idx) => {
+                    const isActive = idx === currentFlowIndex;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `w-full text-left p-5 border transition-all duration-300 cut-card flex items-center justify-between ${
+                        isActive
+                            ? 'bg-ink-900 text-white border-ink-900 shadow-sm'
+                            : 'bg-white text-ink-900 border-slate-200/90 hover:border-brand/50'
+                    }`;
+                    btn.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <span class="font-mono text-sm font-extrabold px-2.5 py-1 ${isActive ? 'bg-brand text-white' : 'bg-surface-off text-brand'}">
+                                ${step.num}
+                            </span>
+                            <div>
+                                <div class="font-mono text-[10px] tracking-widest ${isActive ? 'text-slate-300' : 'text-ink-500'}">
+                                    ${step.en}
+                                </div>
+                                <div class="text-sm sm:text-base font-bold mt-0.5">
+                                    ${step.title}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="font-mono text-xs ${isActive ? 'text-brand-accent' : 'text-slate-400'}">→</span>
+                    `;
+                    btn.addEventListener('click', () => {
+                        currentFlowIndex = idx;
+                        renderFlow();
+                    });
+                    flowStepList.appendChild(btn);
+                });
+
+                const activeStep = flowSteps[currentFlowIndex];
+                flowDetailPanel.innerHTML = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-5 mb-6 border-b border-slate-200">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-extrabold text-white bg-brand px-3 py-1">STEP ${activeStep.num}</span>
+                            <span class="font-mono text-xs font-bold text-ink-500 tracking-wider">${activeStep.en}</span>
+                        </div>
+                        <span class="font-mono text-xs font-bold text-ink-700 bg-surface-off px-3 py-1 border border-slate-200">
+                            SCHEDULE: ${activeStep.duration}
+                        </span>
+                    </div>
+
+                    <h3 class="text-2xl font-extrabold text-ink-900 mb-3">
+                        ${activeStep.title}
+                    </h3>
+                    <p class="text-sm font-bold text-brand mb-4">
+                        ${activeStep.summary}
+                    </p>
+                    <p class="text-ink-500 text-sm leading-[1.95] mb-8">
+                        ${activeStep.detail}
+                    </p>
+
+                    <div class="pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                            <div class="font-mono text-[10px] font-bold text-ink-500 tracking-widest mb-2">TOOLS & ENVIRONMENT / 主な使用環境</div>
+                            <div class="flex flex-wrap gap-2">
+                                ${activeStep.tools.map(t => `<span class="px-3 py-1 bg-surface-off border border-slate-200 text-xs font-mono font-semibold text-ink-700">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="font-mono text-xs font-bold text-ink-500">
+                            ${currentFlowIndex + 1} / ${flowSteps.length}
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderFlow();
+
+            // 8. JOIN US 募集パートタブ切り替え
+            const roleData = {
+                motion: {
+                    title: "MOTION DESIGNER（映像・モーショングラフィックス）",
+                    tools: "AFTER EFFECTS / AVIUTL / BLENDER",
+                    desc: "キネティックタイポグラフィ、シェイプアニメーション、3DCG、画面転換（トランジション）など、楽曲のビートに合わせて空間を動かすパートを担当します。",
+                    req: [
+                        "担当目安：1パートあたり約10秒〜25秒",
+                        "納品仕様：1920×1080 / 60fps（mp4 または ProRes mov）",
+                        "自身の作風を活かしつつ、前後パートとのカットイン連携を楽しめる方"
+                    ]
+                },
+                illustrator: {
+                    title: "ILLUSTRATOR（キャラクター・背景・ロゴデザイン）",
+                    tools: "CLIP STUDIO PAINT / PHOTOSHOP / PROCREATE",
+                    desc: "PVの核となるキャラクターイラスト、背景美術、タイトルロゴなどを制作。映像担当者がモーションをつけやすいパーツ分けデータの制作も歓迎します。",
+                    req: [
+                        "担当目安：1パートあたり1枚〜数枚（表情・ポーズ差分含む）",
+                        "納品仕様：PSD（レイヤー分け推奨）または透過PNG",
+                        "イラストに動きや演出が加わる化学反応を体験したい方"
+                    ]
+                },
+                sound: {
+                    title: "SOUND & MIX（リミックス・音MAD・効果音制作）",
+                    tools: "ABLETON LIVE / FL STUDIO / CUBASE / REAPER",
+                    desc: "楽曲のアレンジ・リミックス、音MADパートの音声制作、または映像のカットインを際立たせる効果音（SFX・トランジション音）の制作を担当します。",
+                    req: [
+                        "担当範囲：パート別音源制作 または 全体SFX・マスタリング",
+                        "納品仕様：48kHz / 24bit WAV（パラデータ提出歓迎）",
+                        "映像班と連携し、音と視覚の完璧な同期を追求できる方"
+                    ]
+                },
+                compositor: {
+                    title: "COMPOSITOR（統合編集・繋ぎ演出・色彩調整）",
+                    tools: "PREMIERE PRO / AFTER EFFECTS / DAVINCI RESOLVE",
+                    desc: "各クリエイターから提出された素材を1本のタイムラインに統合。パート間のカットイン演出の強化、全体のカラーグレーディング、エンドロール制作を行います。",
+                    req: [
+                        "担当範囲：複数パートの統合・最終レンダリング",
+                        "作品全体の一体感と映像美を仕上げる重要ポジション",
+                        "進行ディレクションや構成設計に興味がある方も歓迎"
+                    ]
+                }
+            };
+
+            const roleTabs = document.querySelectorAll('.role-tab');
+            const roleDetailBox = document.getElementById('role-detail-box');
+            const targetRoleSelect = document.getElementById('target-role');
+
+            function renderRoleDetail(roleKey) {
+                const data = roleData[roleKey];
+                roleDetailBox.innerHTML = `
+                    <div>
+                        <div class="inline-block font-mono text-[11px] font-bold text-brand bg-brand-light px-2.5 py-1 mb-3">
+                            ${data.tools}
+                        </div>
+                        <h4 class="text-lg font-extrabold text-ink-900 mb-3">${data.title}</h4>
+                        <p class="text-ink-500 text-sm leading-[1.85] mb-6">${data.desc}</p>
+                    </div>
+                    <div class="pt-5 border-t border-slate-200">
+                        <div class="font-mono text-[11px] font-bold text-ink-700 tracking-wider mb-3">REQUIREMENTS / 募集要項</div>
+                        <ul class="space-y-2 text-xs sm:text-sm text-ink-700">
+                            ${data.req.map(item => `<li class="flex items-start gap-2.5"><span class="text-brand font-bold">■</span><span>${item}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            renderRoleDetail('motion');
+
+            roleTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    roleTabs.forEach(t => {
+                        t.classList.remove('active', 'bg-brand', 'text-white');
+                        t.classList.add('bg-surface-off', 'text-ink-700');
+                    });
+                    tab.classList.add('active', 'bg-brand', 'text-white');
+                    tab.classList.remove('bg-surface-off', 'text-ink-700');
+
+                    const key = tab.dataset.role;
+                    renderRoleDetail(key);
+
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
