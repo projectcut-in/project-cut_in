@@ -123,7 +123,7 @@
     <!-- ==========================================
          1. クリーン・固定ヘッダー
     =========================================== -->
-    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-lg border-b border-slate-200/90 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
             <!-- ロゴ（斜めスラッシュモチーフ付き） -->
             <a href="#" class="flex items-center gap-3.5 group">
@@ -173,93 +173,87 @@
     </header>
 
     <!-- ==========================================
-         2. ヒーローセクション（落ち着いたスタジオトーン＋斜めカットインCanvas）
-    =========================================== -->
-    <section class="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-surface-white">
-        <!-- 右側の控えめな斜め建築レイヤー -->
-        <div class="hidden lg:block absolute top-0 right-0 w-[47%] h-full bg-surface-off border-l border-slate-200/80" style="clip-path: polygon(14% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+     2. ヒーローセクション（背景動画 16:9 ＆ 左から中央へ溶ける白グラデーション）
+=========================================== -->
+<section class="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-white">
+    <!-- 背景動画コンテナ（16:9を維持しながら全体をカバー） -->
+    <div class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        <video src="hero-pv.mp4" autoplay loop muted playsinline 
+               class="absolute top-1/2 left-1/2 w-[177.77777778vh] h-[56.25vw] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover">
+        </video>
 
-        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
-                
-                <!-- 左カラム：誠実で重厚なタイポグラフィ -->
-                <div class="lg:col-span-6 space-y-7">
-                    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-brand-light border border-slate-200 text-brand font-mono text-[11px] font-semibold tracking-[0.16em]">
-                        <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
-                        <span>COLLABORATIVE PV PRODUCTION</span>
-                    </div>
+        <!-- 左半分は白く、中央に向かって透明になるグラデーションオーバーレイ（PC用） -->
+        <div class="hidden lg:block absolute inset-0 bg-gradient-to-r from-white from-81% via-white/85 via-55% to-transparent to-85%"></div>
 
-                    <div class="space-y-3">
-                        <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-black text-ink-900 leading-[1.2] tracking-tight">
-                            1秒で、<br>
-                            <span class="text-brand relative inline-block">
-                                視線を奪う。
-                                <span class="block h-[3px] w-full bg-brand/20 mt-1.5"></span>
-                            </span>
-                        </h1>
-                        <p class="text-lg sm:text-xl font-bold text-ink-700 tracking-wide pt-1">
-                            個性が交差する、その一瞬を創る。
-                        </p>
-                    </div>
+        <!-- スマホ・タブレット用の白半透明グラデーション（上下・全体で文字を読みやすくする） -->
+        <div class="lg:hidden absolute inset-0 bg-gradient-to-b from-white/95 via-white/85 to-white/40"></div>
+    </div>
 
-                    <p class="text-ink-500 text-sm sm:text-[15px] leading-[2] max-w-lg">
-                        それぞれの個性をぶつけ合う。<br>
-                        皆それぞれの考えがあっていい。<br>
-                        クリエーター魂を燃やせる場所を。<br>
-                        Project CUT-INはそういう場所でありたい。
+    <!-- コンテンツコンテナ -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- 左側の文字エリア（枠線をなくし、グラデーション背景の上に直接配置） -->
+            <div class="lg:col-span-6 space-y-7 py-4">
+                <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-brand-light/90 backdrop-blur-sm border border-slate-200 text-brand font-mono text-[11px] font-semibold tracking-[0.16em]">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+                    <span>COLLABORATIVE PV PRODUCTION</span>
+                </div>
+
+                <div class="space-y-3">
+                    <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-black text-ink-900 leading-[1.2] tracking-tight">
+                        1秒で、<br>
+                        <span class="text-brand relative inline-block">
+                            視線を奪う。
+                            <span class="block h-[3px] w-full bg-brand/20 mt-1.5"></span>
+                        </span>
+                    </h1>
+                    <p class="text-lg sm:text-xl font-bold text-ink-700 tracking-wide pt-1">
+                        個性が交差する、その一瞬を創る。
                     </p>
-
-                    <!-- CTAボタン -->
-                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                        <a href="#works" class="px-8 py-4 bg-brand text-white font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn btn-cut-hover flex items-center justify-center gap-3 shadow-sm">
-                            <span>VIEW WORKS / 作品を見る</span>
-                            <span class="font-mono">→</span>
-                        </a>
-                        <a href="#join" class="px-8 py-4 bg-white border border-slate-300 hover:border-ink-900 text-ink-900 font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn transition-all flex items-center justify-center gap-3">
-                            <span>ENTRY / 合作に参加する</span>
-                        </a>
-                    </div>
-
-                    <!-- スタジオ実績サマリー -->
-                    <div class="pt-7 border-t border-slate-200/90 grid grid-cols-3 gap-6 max-w-md">
-                        <div>
-                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">12<span class="text-brand text-base ml-0.5">+</span></div>
-                            <div class="text-[11px] font-medium text-ink-500 mt-1">公開PVプロジェクト</div>
-                        </div>
-                        <div>
-                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">85<span class="text-brand text-base ml-0.5">+</span></div>
-                            <div class="text-[11px] font-medium text-ink-500 mt-1">参加クリエイター数</div>
-                        </div>
-                        <div>
-                            <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">60<span class="text-brand text-xs ml-1">FPS</span></div>
-                            <div class="text-[11px] font-medium text-ink-500 mt-1">高精細タイムライン</div>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- 右カラム：斜めフレームカット＆洗練されたモーショングラフィックCanvas -->
-                <div class="lg:col-span-6">
-                    <div class="relative w-full aspect-[4/3] bg-white border border-slate-200 shadow-lg shadow-slate-200/50 cut-card overflow-hidden">
-                        <canvas id="hero-cutin-canvas" class="w-full h-full block cursor-pointer"></canvas>
+                <p class="text-ink-700 font-medium text-sm sm:text-[15px] leading-[2] max-w-lg">
+                    それぞれの個性をぶつけ合う。<br>
+                    皆それぞれの考えがあっていい。<br>
+                    クリエーター魂を燃やせる場所を。<br>
+                    Project CUT-INはそういう場所でありたい。
+                </p>
 
-                        <!-- オーバーレイUI（タイムコード＆シーン切り替え表示） -->
-                        <!-- 右カラム：UIなし自動再生ループ動画 -->
-                        <div class="lg:col-span-6">
-                            <div class="relative w-full aspect-[4/3] bg-ink-900 border border-slate-200 shadow-lg shadow-slate-200/50 cut-card overflow-hidden">
-                            <video src="hero-pv.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none"></video>
-                            </div>
-                        </div>
-
-                        <div class="absolute bottom-4 left-5 right-5 flex items-center justify-between font-mono text-[10px] text-ink-500 pointer-events-none">
-                            <span class="bg-white/95 px-2.5 py-1 border border-slate-200 tracking-wider">CLICK TO SWITCH CUT</span>
-                            <span id="hero-scene-label" class="bg-ink-900 text-white px-2.5 py-1 font-semibold tracking-wider">SCENE A // MOTION</span>
-                        </div>
-                    </div>
+                <!-- CTAボタン -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                    <a href="#works" class="px-8 py-4 bg-brand text-white font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn btn-cut-hover flex items-center justify-center gap-3 shadow-sm">
+                        <span>VIEW WORKS / 作品を見る</span>
+                        <span class="font-mono">→</span>
+                    </a>
+                    <a href="#join" class="px-8 py-4 bg-white/90 backdrop-blur-sm border border-slate-300 hover:border-ink-900 text-ink-900 font-bold text-xs sm:text-sm tracking-[0.14em] cut-btn transition-all flex items-center justify-center gap-3">
+                        <span>ENTRY / 合作に参加する</span>
+                    </a>
                 </div>
 
+                <!-- スタジオ実績サマリー -->
+                <div class="pt-7 border-t border-slate-300/80 grid grid-cols-3 gap-6 max-w-md">
+                    <div>
+                        <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">Start<span class="text-brand text-base ml-0.5">now</span></div>
+                        <div class="text-[11px] font-semibold text-ink-700 mt-1">公開PVプロジェクト</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">Join<span class="text-brand text-base ml-0.5">us</span></div>
+                        <div class="text-[11px] font-semibold text-ink-700 mt-1">参加クリエイター数</div>
+                    </div>
+                    <div>
+                        <div class="font-mono text-xl sm:text-2xl font-bold text-ink-900">60+<span class="text-brand text-xs ml-1">FPS</span></div>
+                        <div class="text-[11px] font-semibold text-ink-700 mt-1">高レベル編集</div>
+                    </div>
+                </div>
             </div>
+
+            <!-- 右側は動画をクリアに見せるスペース -->
+            <div class="hidden lg:block lg:col-span-6"></div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- ==========================================
          3. MISSION / ABOUTセクション
@@ -273,8 +267,8 @@
                     <span>01 / MISSION & ABOUT</span>
                 </div>
                 <h2 class="text-3xl sm:text-5xl font-extrabold text-ink-900 tracking-tight leading-[1.18] mb-6">
-                    Break the Frame,<br>
-                    <span class="text-brand">Make the Spark.</span>
+                    Respect all,<br>
+                    <span class="text-brand">Match them.</span>
                 </h2>
                 <p class="text-ink-500 text-sm sm:text-base leading-[1.95]">
                     Project CUT-INは、「それぞれの表現を尊重し、合わせることで最高のPVにする」ことをミッションに掲げるPV合作制作スタジオです。単なるパートの集合ではなく、1本の映像作品としての完成度と、クリエイター同士が刺激し合える誠実な制作環境を追求しています。
@@ -325,7 +319,7 @@
                     </h3>
                     <div class="text-xs font-bold text-brand mb-4">制作チームとしての誠実さ</div>
                     <p class="text-ink-500 text-sm leading-[1.9]">
-                        明確なスケジュール管理、レギュレーションの整備、適切なクレジット表記と権利配慮。初めて合作に参加するクリエイターも安心して制作に没頭できる体制を整えています。
+                        明確なスケジュール管理、レギュレーションの整備、コミュニケーション環境の整備。すべてのクリエーターが安心して最高のPVを制作できる環境づくりを目指しています。
                     </p>
                 </div>
             </div>
@@ -636,39 +630,43 @@
     <!-- ==========================================
          作品詳細モーダル（WORKSカードクリック時に表示）
     =========================================== -->
-    <div id="work-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
+    <div id="work-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-8 bg-ink-950/75 backdrop-blur-sm">
         <div class="bg-white border border-slate-200 w-full max-w-3xl max-h-[90vh] overflow-y-auto cut-card shadow-2xl relative">
-            <div class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+            <!-- モーダルヘッダー -->
+            <div class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-6 sm:px-8 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand">
                     <span id="modal-year">2026</span>
                     <span class="text-slate-300">/</span>
                     <span id="modal-category-badge">MOTION GRAPHICS</span>
                 </div>
-                <button id="close-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                <button id="close-modal-btn" class="text-ink-500 hover:text-ink-900 p-1.5 focus:outline-none transition-colors" aria-label="閉じる">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
 
-            <!-- YouTube動画埋め込みエリア -->
-            <div class="relative w-full aspect-video bg-ink-950 border border-slate-200 overflow-hidden">
-            <iframe id="modal-youtube-iframe" class="w-full h-full" src="about:blank" title="YouTube video player" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+            <!-- モーダルコンテンツ（余白を広く確保したレイアウト） -->
+            <div class="p-8 sm:p-10 space-y-8">
+                <!-- YouTube動画埋め込みエリア -->
+                <div class="relative w-full aspect-video bg-ink-950 border border-slate-200 overflow-hidden shadow-sm">
+                    <iframe id="modal-youtube-iframe" class="w-full h-full" src="about:blank" title="YouTube video player" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
 
-            <!-- タイトル・解説 -->
-            <div>
-                <h3 id="modal-title" class="text-2xl font-extrabold text-ink-900 tracking-tight mb-1.5">作品タイトル</h3>
-                <p id="modal-song" class="font-mono text-xs font-semibold text-brand mb-4">使用楽曲</p>
-                <p id="modal-desc" class="text-ink-500 text-sm leading-[1.9]">解説文</p>
-            </div>
+                <!-- タイトル・解説エリア -->
+                <div class="space-y-3">
+                    <h3 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight">作品タイトル</h3>
+                    <p id="modal-song" class="font-mono text-xs font-semibold text-brand tracking-wider">使用楽曲</p>
+                    <p id="modal-desc" class="text-ink-700 text-sm sm:text-base leading-[2] pt-1">解説文</p>
+                </div>
 
-            <!-- 制作情報・担当スタッフ（箇条書き） -->
-            <div class="bg-surface-off p-6 border border-slate-200/90">
-                <h4 class="font-mono text-xs font-bold text-ink-900 tracking-wider mb-4 border-b border-slate-200 pb-2">
-                    PRODUCTION DETAILS / 制作データ・担当スタッフ
-                </h4>
-            <ul id="modal-details-list" class="space-y-2.5 text-sm text-ink-700 list-disc list-inside">
-                <!-- JSで箇条書きが生成されます -->
-            </ul>
+                <!-- 制作情報・担当スタッフ（箇条書き） -->
+                <div class="bg-surface-off p-6 sm:p-7 border border-slate-200/95 space-y-4">
+                    <h4 class="font-mono text-xs font-bold text-ink-900 tracking-widest border-b border-slate-200 pb-3">
+                        PRODUCTION DETAILS / 制作データ・担当スタッフ
+                    </h4>
+                    <ul id="modal-details-list" class="space-y-3 text-sm text-ink-700 list-disc list-inside pl-1">
+                        <!-- JSで箇条書きが生成されます -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -744,24 +742,24 @@
                 },
                 {
                     id: 102,
-                    date: "2026.10.28",
-                    category: "RELEASE",
-                    title: "合作PV『OVERDRIVE // 境界線突破PV』がYouTube・niconico合計48万回再生を突破",
-                    body: "総勢14名のモーショングラフィッカーが参加した合作PV『OVERDRIVE // 境界線突破PV』が、公開から3ヶ月で累計48万回再生を突破いたしました。\n\nご視聴・コメントをお寄せいただいた皆様、ならびにご協力いただいた楽曲制作チームに心より感謝申し上げます。各クリエイターの担当パート構成は「WORKS」セクションのタイムライン詳細からご覧いただけます。"
+                    date: "2026.11.23",
+                    category: "RECRUIT",
+                    title: "本プロジェクトの参加クリエーター募集について",
+                    body: "本日も本ページをご利用いただきまして誠にありがとうございます。本日はクリエーターの皆様へのお知らせとなります。本プロジェクト Project CUT-IN は本格的な参加を希望されるクリエーターの皆様の募集を開始させていただきます。参加を希望されるクリエーターの皆様は本ページ最下部にございます、JOIN USセクションのGoogle フォームへのご回答をよろしくお願いいたします。"
                 },
                 {
                     id: 103,
-                    date: "2026.09.12",
+                    date: "2026.11.23",
                     category: "INFO",
-                    title: "Project CUT-IN 公式Webサイトをリニューアル＆制作レギュレーションを公開",
-                    body: "より多くのクリエイターと視聴者の皆様にプロジェクトの理念や制作プロセスを知っていただくため、公式Webサイトを全面リニューアルいたしました。\n\nあわせて、合作制作における標準フレームレート（60fps）や提出フォーマット、クレジット表記ポリシーをまとめた制作ガイドラインも刷新しております。"
+                    title: "Project CUT-IN ホームページの改修作業によるサイトの停止について",
+                    body: "本日も本プロジェクトに参加・利用していただきまして誠にありがとうございます。さて、本ホームページについてのお知らせがございます。本ホームページは皆様クリエーターの方々の利便性の向上を図って、改修作業を行います。改修作業時期は未定ですが皆様のご理解とご協力をお願い申し上げます。また、改修作業等の必要な作業を完了しましたら順次サービスを再開させていただく次第ですのでその点にもご留意ください。"
                 },
                 {
                     id: 104,
-                    date: "2026.08.04",
+                    date: "2026.11.22",
                     category: "RELEASE",
-                    title: "手描きアニメーション合作『夜明けのエンドロール』プレミア公開のお知らせ",
-                    body: "絵師12名・動画師6名の計18名で制作したストーリー仕立ての手描きPV合作『夜明けのエンドロール』をプレミア公開いたしました。\n\nキャラクターの視線や小物の動きを次のパートへと受け渡す、繊細なカットイン演出をぜひお楽しみください。"
+                    title: "本プロジェクト、Project CUT-INのテスト運営を開始しました！",
+                    body: "本日より本プロジェクト「Project CUT-IN」のテスト運営を開始いたします。クリエーター皆様の方々と素晴らしい、新たな・今までにないような経験・動画を作れることを光栄に思っております。まだまだ右も左もわからないような状態ですが、皆様からのご意見や経験を通じて、これまでにないような素晴らしい合作プラットホームになることを楽しみにしております。どうぞ皆様、これからよろしくお願いいたします。　　Project CUT-IN 代表"
                 }
             ];
 
@@ -849,7 +847,7 @@ const worksData = [
         title: "OVERDRIVE // 境界線突破PV",
         category: "long", // "long" または "shorts"
         categoryLabel: "LONG PV (16:9)",
-        youtubeId: "dQw4w9WgXcQ", // ← ここに実際のYouTube動画IDを入れる
+        youtubeId: "1BoOtSiRz-E", // ← ここに実際のYouTube動画IDを入れる
         duration: "03:45",
         song: "楽曲：『OVERDRIVE』 / SynthWave Collective",
         patternType: "slash",
