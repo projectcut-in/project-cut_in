@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEWS & UPDATES | Project CUT-IN — Collaborative PV Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F8FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2B4C7E;
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white flex flex-col min-h-screen">
+
+    <!-- ==========================================
+         1. 共通固定ヘッダー
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <!-- ロゴ（トップページへ戻る） -->
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="index.html#mission" class="hover:text-brand transition-colors py-1">MISSION</a>
+                <a href="news.html" class="text-brand border-b-2 border-brand py-1">NEWS</a>
+                <a href="index.html#works" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="index.html#comment" class="hover:text-brand transition-colors py-1">COMMENT</a>
+                <a href="index.html#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="index.html#join" class="hover:text-brand transition-colors py-1">JOIN US</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-ink-900 hover:text-brand focus:outline-none" aria-label="メニューを開く">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- モバイルドロップダウンメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-3.5 text-xs font-bold tracking-widest">
+            <a href="index.html#mission" class="block py-1.5 text-ink-700 hover:text-brand">01. MISSION</a>
+            <a href="news.html" class="block py-1.5 text-brand">02. NEWS（現在のページ）</a>
+            <a href="index.html#works" class="block py-1.5 text-ink-700 hover:text-brand">03. WORKS</a>
+            <a href="index.html#comment" class="block py-1.5 text-ink-700 hover:text-brand">04. COMMENT</a>
+            <a href="index.html#flow" class="block py-1.5 text-ink-700 hover:text-brand">05. FLOW</a>
+            <a href="index.html#join" class="block py-1.5 text-ink-700 hover:text-brand">06. JOIN US</a>
+            <a href="index.html#join" class="block py-3 text-center bg-brand text-white cut-btn mt-2">ENTRY / 合作に参加する</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. サブページ専用・タイトルヘッダー
+    =========================================== -->
+    <section class="pt-32 pb-16 bg-surface-off border-b border-slate-200/80 relative overflow-hidden bg-studio-dots">
+        <div class="hidden md:block absolute top-0 right-0 w-1/3 h-full bg-white/70 border-l border-slate-200/60" style="clip-path: polygon(22% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- パンくずリスト -->
+            <nav class="flex items-center gap-2 font-mono text-[11px] font-semibold text-ink-500 mb-6">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand font-bold">NEWS & UPDATES</span>
+            </nav>
+
+            <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                <span class="w-6 h-[1.5px] bg-brand"></span>
+                <span>ARCHIVE // STUDIO ANNOUNCEMENTS</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-ink-900 tracking-tight">
+                NEWS <span class="text-ink-500 text-lg sm:text-xl font-bold ml-2">/ お知らせ・活動報告一覧</span>
+            </h1>
+            <p class="mt-4 text-ink-500 text-sm sm:text-base max-w-2xl leading-relaxed">
+                Project CUT-INの最新リリース情報、新規合作のクリエイター募集要項、スタジオ運営に関するお知らせを掲載しています。
+            </p>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. メインコンテンツ：検索・カテゴリー絞り込み・記事一覧
+    =========================================== -->
+    <main class="flex-1 py-20 bg-surface-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+            <!-- コントロールバー（カテゴリータブ ＋ キーワード検索） -->
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 pb-8 mb-8 border-b border-slate-200">
+                <!-- カテゴリーフィルター -->
+                <div class="flex flex-wrap gap-2" id="news-filter-container">
+                    <button type="button" data-news-filter="all" class="news-filter-btn active px-4 py-2 text-xs font-mono font-bold tracking-wider bg-ink-900 text-white cut-btn">
+                        ALL
+                    </button>
+                    <button type="button" data-news-filter="RECRUIT" class="news-filter-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        RECRUIT / 募集
+                    </button>
+                    <button type="button" data-news-filter="RELEASE" class="news-filter-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        RELEASE / 公開
+                    </button>
+                    <button type="button" data-news-filter="INFO" class="news-filter-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        INFO / お知らせ
+                    </button>
+                </div>
+
+                <!-- キーワード検索ボックス -->
+                <div class="relative w-full lg:w-72">
+                    <input type="text" id="news-search-input" placeholder="キーワードで記事を検索..."
+                        class="w-full pl-4 pr-10 py-2.5 bg-surface-off border border-slate-200 text-sm text-ink-900 focus:outline-none focus:bg-white focus:border-brand transition-colors">
+                    <svg class="w-4 h-4 text-ink-500 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 件数表示 -->
+            <div class="flex items-center justify-between font-mono text-xs text-ink-500 mb-4">
+                <span id="news-count-label">SHOWING ALL ARTICLES</span>
+                <span>CLICK AN ARTICLE TO READ</span>
+            </div>
+
+            <!-- ニュース記事リスト -->
+            <div id="news-archive-list" class="border-t border-slate-200 divide-y divide-slate-200">
+                <!-- JSで動的生成 -->
+            </div>
+
+            <!-- 該当なし表示（初期非表示） -->
+            <div id="news-empty-state" class="hidden py-16 text-center bg-surface-off border border-slate-200 mt-4">
+                <p class="font-mono text-sm font-bold text-ink-700 mb-2">NO ARTICLES FOUND</p>
+                <p class="text-xs text-ink-500">条件に一致するお知らせが見つかりませんでした。検索ワードやカテゴリーを変更してお試しください。</p>
+            </div>
+
+            <!-- トップページへ戻るボタン -->
+            <div class="mt-16 pt-10 border-t border-slate-200/80 flex justify-between items-center">
+                <a href="index.html" class="inline-flex items-center gap-3 px-7 py-3.5 bg-surface-off border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.16em] cut-btn transition-all group">
+                    <span class="text-brand group-hover:-translate-x-1 transition-transform">←</span>
+                    <span>BACK TO TOP / トップページへ戻る</span>
+                </a>
+                <a href="index.html#join" class="hidden sm:inline-flex items-center gap-3 px-7 py-3.5 bg-brand text-white font-mono text-xs font-bold tracking-[0.16em] cut-btn btn-cut-hover">
+                    <span>ENTRY / 合作に参加する</span>
+                    <span>→</span>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==========================================
+         4. 共通フッター
+    =========================================== -->
+    <footer class="bg-surface-off border-t border-slate-200/80 py-14">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-6 h-6 bg-ink-900 flex items-center justify-center cut-btn">
+                            <div class="w-[2px] h-7 bg-brand-accent rotate-[28deg]"></div>
+                            <div class="w-[1.5px] h-7 bg-white rotate-[28deg] ml-0.5"></div>
+                        </div>
+                        <span class="font-extrabold tracking-tight text-lg text-ink-900">
+                            Project <span class="text-brand">CUT-IN</span>
+                        </span>
+                    </div>
+                    <p class="text-xs font-medium text-ink-500 mt-2">
+                        個性が交差する。その一瞬を創る。
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 text-xs font-bold text-ink-700">
+                    <a href="index.html#mission" class="hover:text-brand transition-colors">MISSION</a>
+                    <a href="news.html" class="text-brand">NEWS</a>
+                    <a href="index.html#works" class="hover:text-brand transition-colors">WORKS</a>
+                    <a href="index.html#comment" class="hover:text-brand transition-colors">COMMENT</a>
+                    <a href="index.html#flow" class="hover:text-brand transition-colors">FLOW</a>
+                    <a href="index.html#join" class="hover:text-brand transition-colors">JOIN US</a>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-2">
+                <p>&copy; 2026 Project CUT-IN.</p>
+                <p>COLLABORATIVE PV STUDIO // AICHI</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         5. NEWS記事詳細モーダル
+    =========================================== -->
+    <div id="news-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
+        <div class="bg-white border border-slate-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto cut-card shadow-2xl relative">
+            <div class="sticky top-0 z-10 bg-surface-off border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold">
+                    <span id="news-modal-date" class="text-ink-500">2026.11.15</span>
+                    <span id="news-modal-cat" class="px-2.5 py-0.5 bg-brand text-white text-[10px]">RECRUIT</span>
+                </div>
+                <button id="close-news-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 sm:p-9 space-y-6">
+                <h2 id="news-modal-title" class="text-xl sm:text-2xl font-extrabold text-ink-900 leading-snug">
+                    ニュースタイトル
+                </h2>
+                <div class="h-[1px] w-full bg-slate-200"></div>
+                <div id="news-modal-body" class="text-ink-700 text-sm sm:text-[15px] leading-[2] whitespace-pre-line">
+                    ニュース本文
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                    <a id="news-modal-cta" href="index.html#join" class="hidden px-6 py-2.5 bg-brand text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-ink-900 transition-colors">
+                        ENTRY FORMへ進む →
+                    </a>
+                    <button type="button" id="news-modal-ok-btn" class="ml-auto px-6 py-2.5 bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-brand transition-colors">
+                        CLOSE / 閉じる
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JavaScript（ニュース一覧・検索・フィルター・モーダル）
+    =========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // モバイルメニュー開閉
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // ニュース全件データ（ここに記事を追加していくだけで一覧に反映されます）
+            let allNewsData = [];
+
+async function loadArchiveNews() {
+    try {
+        const res = await fetch('news.txt', { cache: 'no-store' });
+        const text = await res.text();
+        const blocks = text.split('===').map(b => b.trim()).filter(Boolean);
+
+        allNewsData = blocks.map((block, index) => {
+            const lines = block.split('\n');
+            const headerParts = lines[0].split('|').map(s => s.trim());
+            const bodyText = lines.slice(1).join('\n').trim();
+            return {
+                id: index + 1,
+                date: headerParts[0] || '',
+                category: headerParts[1] || 'INFO',
+                showEntryCta: headerParts[2] === 'true',
+                title: headerParts[3] || '',
+                summary: headerParts[4] || '',
+                body: bodyText
+            };
+        });
+
+        renderNewsArchive();
+    } catch (err) {
+        listEl.innerHTML = `<p class="py-8 text-xs font-mono text-ink-500">※news.txt の読み込みに失敗しました。ローカルサーバー（Live Server等）経由で開いてください。</p>`;
+    }
+}
+
+// 元の renderNewsArchive(); の代わりにこちらを呼び出す
+loadArchiveNews();
+
+            const listEl = document.getElementById('news-archive-list');
+            const emptyStateEl = document.getElementById('news-empty-state');
+            const countLabelEl = document.getElementById('news-count-label');
+            const filterBtns = document.querySelectorAll('.news-filter-btn');
+            const searchInput = document.getElementById('news-search-input');
+
+            const newsModal = document.getElementById('news-modal');
+            const closeModalBtn = document.getElementById('close-news-modal-btn');
+            const modalOkBtn = document.getElementById('news-modal-ok-btn');
+            const modalCtaBtn = document.getElementById('news-modal-cta');
+
+            let currentCategory = 'all';
+            let currentKeyword = '';
+
+            function renderNewsArchive() {
+                const filtered = allNewsData.filter(item => {
+                    const matchCat = currentCategory === 'all' || item.category === currentCategory;
+                    const kw = currentKeyword.toLowerCase();
+                    const matchKw = !kw ||
+                        item.title.toLowerCase().includes(kw) ||
+                        item.summary.toLowerCase().includes(kw) ||
+                        item.body.toLowerCase().includes(kw);
+                    return matchCat && matchKw;
+                });
+
+                countLabelEl.textContent = `TOTAL: ${filtered.length} ARTICLES`;
+                listEl.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    emptyStateEl.classList.remove('hidden');
+                    return;
+                }
+                emptyStateEl.classList.add('hidden');
+
+                filtered.forEach(item => {
+                    const badgeStyle = item.category === 'RECRUIT'
+                        ? 'bg-brand text-white'
+                        : item.category === 'RELEASE'
+                        ? 'bg-ink-900 text-white'
+                        : 'bg-surface-subtle text-ink-700';
+
+                    const article = document.createElement('article');
+                    article.className = 'py-7 px-4 hover:bg-surface-off transition-colors cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4';
+                    article.innerHTML = `
+                        <div class="space-y-2 max-w-4xl">
+                            <div class="flex items-center gap-3">
+                                <time class="font-mono text-xs font-semibold text-ink-500">${item.date}</time>
+                                <span class="font-mono text-[10px] font-bold px-2.5 py-0.5 tracking-wider ${badgeStyle}">
+                                    ${item.category}
+                                </span>
+                            </div>
+                            <h2 class="text-base sm:text-lg font-extrabold text-ink-900 group-hover:text-brand transition-colors">
+                                ${item.title}
+                            </h2>
+                            <p class="text-xs sm:text-sm text-ink-500 leading-relaxed">
+                                ${item.summary}
+                            </p>
+                        </div>
+                        <div class="shrink-0 self-end md:self-center">
+                            <span class="inline-flex items-center gap-2 font-mono text-xs font-bold text-ink-500 group-hover:text-brand transition-colors">
+                                <span>READ ARTICLE</span>
+                                <span class="group-hover:translate-x-1 transition-transform">→</span>
+                            </span>
+                        </div>
+                    `;
+
+                    article.addEventListener('click', () => {
+                        document.getElementById('news-modal-date').textContent = item.date;
+                        document.getElementById('news-modal-cat').textContent = item.category;
+                        document.getElementById('news-modal-title').textContent = item.title;
+                        document.getElementById('news-modal-body').textContent = item.body;
+                        if (item.showEntryCta) {
+                            modalCtaBtn.classList.remove('hidden');
+                        } else {
+                            modalCtaBtn.classList.add('hidden');
+                        }
+                        newsModal.classList.remove('hidden');
+                        newsModal.classList.add('flex');
+                        document.body.style.overflow = 'hidden';
+                    });
+
+                    listEl.appendChild(article);
+                });
+            }
+
+            renderNewsArchive();
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-ink-900', 'text-white');
+                        b.classList.add('bg-surface-off', 'text-ink-700');
+                    });
+                    btn.classList.add('active', 'bg-ink-900', 'text-white');
+                    btn.classList.remove('bg-surface-off', 'text-ink-700');
+                    currentCategory = btn.dataset.newsFilter;
+                    renderNewsArchive();
+                });
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                currentKeyword = e.target.value.trim();
+                renderNewsArchive();
+            });
+
+            function closeNewsModal() {
+                newsModal.classList.add('hidden');
+                newsModal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+            closeModalBtn.addEventListener('click', closeNewsModal);
+            modalOkBtn.addEventListener('click', closeNewsModal);
+            newsModal.addEventListener('click', (e) => {
+                if (e.target === newsModal) closeNewsModal();
+            });
+        });
+    </script>
+</body>
+</html>

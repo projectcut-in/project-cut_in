@@ -770,113 +770,114 @@
             }, { threshold: 0.1 });
             revealElements.forEach(el => revealObserver.observe(el));
 
-            // 4. NEWSセクションデータ＆インタラクション（※新規追加）
-            const newsData = [
-                {
-                    id: 101,
-                    date: "2026.11.24",
-                    category: "RECRUIT",
-                    title: "2026年冬『ボカロ曲合作PV』　参加クリエイター募集を開始しました",
-                    body: "Project CUT-INでは、2027年春の公開に向けた大型PV合作プロジェクト『ボカロ曲合作PV』の参加クリエイター募集を開始いたしました。\n\n募集パートは映像を作成する MOTION パート です。合作への参加が初めての方も大丈夫！！私も初めてです！！皆さんで協力して最高のPVを作り上げましょう！！"
-                },
-                {
-                    id: 102,
-                    date: "2026.11.23",
-                    category: "RECRUIT",
-                    title: "本プロジェクトの参加クリエーター募集について",
-                    body: "本日も本ページをご利用いただきまして誠にありがとうございます。本日はクリエーターの皆様へのお知らせとなります。本プロジェクト Project CUT-IN は本格的な参加を希望されるクリエーターの皆様の募集を開始させていただきます。参加を希望されるクリエーターの皆様は本ページ最下部にございます、JOIN USセクションのGoogle フォームへのご回答をよろしくお願いいたします。"
-                },
-                {
-                    id: 103,
-                    date: "2026.11.23",
-                    category: "INFO",
-                    title: "Project CUT-IN ホームページの改修作業によるサイトの停止について",
-                    body: "本日も本プロジェクトに参加・利用していただきまして誠にありがとうございます。さて、本ホームページについてのお知らせがございます。本ホームページは皆様クリエーターの方々の利便性の向上を図って、改修作業を行います。改修作業時期は未定ですが皆様のご理解とご協力をお願い申し上げます。また、改修作業等の必要な作業を完了しましたら順次サービスを再開させていただく次第ですのでその点にもご留意ください。"
-                },
-                {
-                    id: 104,
-                    date: "2026.11.22",
-                    category: "RELEASE",
-                    title: "本プロジェクト、Project CUT-INのテスト運営を開始しました！",
-                    body: "本日より本プロジェクト「Project CUT-IN」のテスト運営を開始いたします。クリエーター皆様の方々と素晴らしい、新たな・今までにないような経験・動画を作れることを光栄に思っております。まだまだ右も左もわからないような状態ですが、皆様からのご意見や経験を通じて、これまでにないような素晴らしい合作プラットホームになることを楽しみにしております。どうぞ皆様、これからよろしくお願いいたします。　　Project CUT-IN 代表"
-                }
-            ];
+            // 4. NEWSセクション（共通の news.txt から最新4件のみ取得して表示）
+const newsListEl = document.getElementById('news-list');
+const newsFilterBtns = document.querySelectorAll('.news-filter-btn');
+const newsModal = document.getElementById('news-modal');
+const closeNewsModalBtn = document.getElementById('close-news-modal-btn');
+const newsModalOkBtn = document.getElementById('news-modal-ok-btn');
 
-            const newsListEl = document.getElementById('news-list');
-            const newsFilterBtns = document.querySelectorAll('.news-filter-btn');
-            const newsModal = document.getElementById('news-modal');
-            const closeNewsModalBtn = document.getElementById('close-news-modal-btn');
-            const newsModalOkBtn = document.getElementById('news-modal-ok-btn');
+let topNewsData = [];
 
-            function renderNews(filter = 'all') {
-                newsListEl.innerHTML = '';
-                const items = filter === 'all' ? newsData : newsData.filter(n => n.category === filter);
+// news.txt を読み込んでパースする関数
+async function loadTopNews() {
+    try {
+        const res = await fetch('news.txt', { cache: 'no-store' });
+        const text = await res.text();
+        const blocks = text.split('===').map(b => b.trim()).filter(Boolean);
 
-                items.forEach(item => {
-                    const row = document.createElement('article');
-                    row.className = 'py-5 sm:py-6 px-3 hover:bg-surface-off transition-colors cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6';
-                    
-                    const badgeStyle = item.category === 'RECRUIT'
-                        ? 'bg-brand text-white'
-                        : item.category === 'RELEASE'
-                        ? 'bg-ink-900 text-white'
-                        : 'bg-surface-subtle text-ink-700';
+        const parsed = blocks.map((block, index) => {
+            const lines = block.split('\n');
+            const headerParts = lines[0].split('|').map(s => s.trim());
+            const bodyText = lines.slice(1).join('\n').trim();
+            return {
+                id: index + 1,
+                date: headerParts[0] || '',
+                category: headerParts[1] || 'INFO',
+                showEntryCta: headerParts[2] === 'true',
+                title: headerParts[3] || '',
+                summary: headerParts[4] || '',
+                body: bodyText
+            };
+        });
 
-                    row.innerHTML = `
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-5">
-                            <div class="flex items-center gap-3 shrink-0">
-                                <time class="font-mono text-xs font-semibold text-ink-500">${item.date}</time>
-                                <span class="font-mono text-[10px] font-bold px-2.5 py-0.5 tracking-wider ${badgeStyle}">
-                                    ${item.category}
-                                </span>
-                            </div>
-                            <h3 class="text-sm sm:text-[15px] font-bold text-ink-900 group-hover:text-brand transition-colors">
-                                ${item.title}
-                            </h3>
-                        </div>
-                        <span class="font-mono text-xs font-bold text-ink-300 group-hover:text-brand group-hover:translate-x-1 transition-all shrink-0 self-end sm:self-center">
-                            READ →
-                        </span>
-                    `;
+        // ★ 新しい4件だけを取り出す
+        topNewsData = parsed.slice(0, 4);
+        renderTopNews('all');
+    } catch (err) {
+        newsListEl.innerHTML = `<p class="py-6 text-xs font-mono text-ink-500">※ローカル環境ではブラウザの制限により news.txt が読み込めない場合があります。VS CodeのLive ServerやWebサーバー上でご確認ください。</p>`;
+    }
+}
 
-                    row.addEventListener('click', () => {
-                        document.getElementById('news-modal-date').textContent = item.date;
-                        document.getElementById('news-modal-cat').textContent = item.category;
-                        document.getElementById('news-modal-title').textContent = item.title;
-                        document.getElementById('news-modal-body').textContent = item.body;
-                        newsModal.classList.remove('hidden');
-                        newsModal.classList.add('flex');
-                        document.body.style.overflow = 'hidden';
-                    });
+function renderTopNews(filter = 'all') {
+    newsListEl.innerHTML = '';
+    const items = filter === 'all' ? topNewsData : topNewsData.filter(n => n.category === filter);
 
-                    newsListEl.appendChild(row);
-                });
-            }
+    items.forEach(item => {
+        const row = document.createElement('article');
+        row.className = 'py-5 sm:py-6 px-3 hover:bg-surface-off transition-colors cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6';
+        
+        const badgeStyle = item.category === 'RECRUIT'
+            ? 'bg-brand text-white'
+            : item.category === 'RELEASE'
+            ? 'bg-ink-900 text-white'
+            : 'bg-surface-subtle text-ink-700';
 
-            renderNews('all');
+        row.innerHTML = `
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-5">
+                <div class="flex items-center gap-3 shrink-0">
+                    <time class="font-mono text-xs font-semibold text-ink-500">${item.date}</time>
+                    <span class="font-mono text-[10px] font-bold px-2.5 py-0.5 tracking-wider ${badgeStyle}">
+                        ${item.category}
+                    </span>
+                </div>
+                <h3 class="text-sm sm:text-[15px] font-bold text-ink-900 group-hover:text-brand transition-colors">
+                    ${item.title}
+                </h3>
+            </div>
+            <span class="font-mono text-xs font-bold text-ink-300 group-hover:text-brand group-hover:translate-x-1 transition-all shrink-0 self-end sm:self-center">
+                READ →
+            </span>
+        `;
 
-            newsFilterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    newsFilterBtns.forEach(b => {
-                        b.classList.remove('active', 'bg-ink-900', 'text-white');
-                        b.classList.add('bg-surface-off', 'text-ink-700');
-                    });
-                    btn.classList.add('active', 'bg-ink-900', 'text-white');
-                    btn.classList.remove('bg-surface-off', 'text-ink-700');
-                    renderNews(btn.dataset.newsFilter);
-                });
-            });
+        row.addEventListener('click', () => {
+            document.getElementById('news-modal-date').textContent = item.date;
+            document.getElementById('news-modal-cat').textContent = item.category;
+            document.getElementById('news-modal-title').textContent = item.title;
+            document.getElementById('news-modal-body').textContent = item.body;
+            newsModal.classList.remove('hidden');
+            newsModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        });
 
-            function closeNewsModal() {
-                newsModal.classList.add('hidden');
-                newsModal.classList.remove('flex');
-                document.body.style.overflow = '';
-            }
-            closeNewsModalBtn.addEventListener('click', closeNewsModal);
-            newsModalOkBtn.addEventListener('click', closeNewsModal);
-            newsModal.addEventListener('click', (e) => {
-                if (e.target === newsModal) closeNewsModal();
-            });
+        newsListEl.appendChild(row);
+    });
+}
+
+loadTopNews();
+
+newsFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        newsFilterBtns.forEach(b => {
+            b.classList.remove('active', 'bg-ink-900', 'text-white');
+            b.classList.add('bg-surface-off', 'text-ink-700');
+        });
+        btn.classList.add('active', 'bg-ink-900', 'text-white');
+        btn.classList.remove('bg-surface-off', 'text-ink-700');
+        renderTopNews(btn.dataset.newsFilter);
+    });
+});
+
+function closeNewsModal() {
+    newsModal.classList.add('hidden');
+    newsModal.classList.remove('flex');
+    document.body.style.overflow = '';
+}
+closeNewsModalBtn.addEventListener('click', closeNewsModal);
+newsModalOkBtn.addEventListener('click', closeNewsModal);
+newsModal.addEventListener('click', (e) => {
+    if (e.target === newsModal) closeNewsModal();
+});
 
             // 5. 作品アーカイブデータ（YouTube・Shorts/ロング対応）
 const worksData = [
