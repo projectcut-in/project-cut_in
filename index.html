@@ -419,7 +419,7 @@
             </div>
             <!-- 詳細ページへの遷移ボタン -->
             <div class="mt-12 flex justify-end reveal-up">
-                <a href="none.html" class="inline-flex items-center gap-4 px-8 py-4 bg-white border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.16em] cut-btn transition-all group shadow-sm">
+                <a href="works.html" class="inline-flex items-center gap-4 px-8 py-4 bg-white border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.16em] cut-btn transition-all group shadow-sm">
                     <span>VIEW ALL WORKS / 全作品アーカイブへ</span>
                     <span class="text-brand group-hover:translate-x-1 transition-transform">→</span>
                 </a>
@@ -879,83 +879,58 @@ newsModal.addEventListener('click', (e) => {
     if (e.target === newsModal) closeNewsModal();
 });
 
-            // 5. 作品アーカイブデータ（YouTube・Shorts/ロング対応）
-const worksData = [
-    {
-        id: 1,
-        year: "2026",
-        title: "ロウワー // 文字PV作品",
-        category: "long", // "long" または "shorts"
-        categoryLabel: "LONG PV (16:9)",
-        youtubeId: "1BoOtSiRz-E", // ← ここに実際のYouTube動画IDを入れる
-        duration: "00:26",
-        song: "楽曲：『ロウワー』 / ぬゆり",
-        patternType: "slash",
-        desc: "YouTubeクリエーター「なーさい」が制作したモーション系文字PV。",
-        details: [
-            "制作日：2026年10月25日　公開（制作期間：2週間）",
-            "企画・ディレクション：なーさい",
-            "モーショングラフィックス：なーさい",
-            "統合編集・コンポジット：なーさい"
-        ]
-    },
-    {
-        id: 2,
-        year: "2026",
-        title: "新人クリエーターが制作した初文字PV！",
-        category: "long",
-        categoryLabel: "LONG PV (16:9)",
-        youtubeId: "Nw-hvWl9V10", // ← ここに実際のShorts動画IDを入れる
-        duration: "00:36",
-        song: "楽曲：『とても素敵な六月でした』 / Eight",
-        patternType: "bars",
-        desc: "新人クリエーターが初制作！！期待の初作品とは！？",
-        details: [
-            "制作日：2026年10月11日 公開（制作期間：2週間）",
-            "企画・進行：切り餅",
-            "画像素材：切り餅",
-            "アニメーション・映像演出：切り餅"
-        ]
-    },
-    {
-        id: 3,
-        year: "2026",
-        title: "うさ義式立ち絵を用いたショートPV",
-        category: "shorts",
-        categoryLabel: "SHORT (9:16)",
-        youtubeId: "tr94AmojXiY", // ← ここに実際のShorts動画IDを入れる
-        duration: "00:23",
-        song: "楽曲：『くうになる』 / MIMI",
-        patternType: "bars",
-        desc: "初！東方立ち絵を用いたコラボレーションPV！！",
-        details: [
-            "制作日：2026年9月1日 公開（制作期間：2週間）",
-            "企画・進行：切り餅",
-            "立ち絵素材編集：切り餅",
-            "アニメーション・映像演出：切り餅"
-        ]
-    }
-    // 必要に応じて同様の形式で作品を追加
-];
-
+// ==========================================
+// 5 & 6. works.txt から読み込み（index.html は最新3件のみ表示）
+// ==========================================
+let worksData = [];
 const worksGrid = document.getElementById('works-grid');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
-function getCardArtworkSVG(type) {
-    if (type === 'slash') {
-        return `<svg class="w-full h-full" viewBox="0 0 400 225" fill="none"><rect width="400" height="225" fill="#F7F8FA"/><polygon points="240,0 400,0 400,225 160,225" fill="#F0F4FA"/><line x1="240" y1="0" x2="160" y2="225" stroke="#2B4C7E" stroke-width="2"/><rect x="36" y="42" width="120" height="68" stroke="#161C27" stroke-width="1.2" fill="#FFFFFF"/></svg>`;
+// works.txt を読み込んで配列に変換する共通処理
+async function loadWorksFromTxt() {
+    try {
+        const res = await fetch('works.txt');
+        if (!res.ok) throw new Error('works.txt の読み込みに失敗しました');
+        const text = await res.text();
+
+        worksData = text
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line && !line.startsWith('#')) // 空行と #コメント行を除外
+            .map((line, index) => {
+                const cols = line.split('|').map(c => c.trim());
+                const cat = (cols[2] || 'long').toLowerCase();
+                return {
+                    id: index + 1,
+                    year: cols[0] || '',
+                    title: cols[1] || '',
+                    category: cat,
+                    categoryLabel: cat === 'shorts' ? 'SHORTS (9:16)' : 'LONG PV (16:9)',
+                    youtubeId: cols[3] || '',
+                    duration: cols[4] || '',
+                    song: cols[5] || '',
+                    desc: cols[6] || '',
+                    details: cols[7] ? cols[7].split(';;').map(d => d.trim()) : []
+                };
+            });
+
+        renderWorks('all');
+    } catch (err) {
+        console.error(err);
+        worksGrid.innerHTML = `<p class="col-span-full text-xs font-mono text-ink-500">※ローカル環境（file://）ではブラウザの制限により works.txt を読み込めない場合があります。VS Code の Live Server 等でご確認ください。</p>`;
     }
-    return `<svg class="w-full h-full" viewBox="0 0 400 225" fill="none"><rect width="400" height="225" fill="#F7F8FA"/><rect x="48" y="65" width="14" height="95" fill="#2B4C7E"/><rect x="76" y="90" width="14" height="70" fill="#94A3B8"/><polygon points="260,0 400,0 400,225 200,225" fill="#161C27"/><line x1="260" y1="0" x2="200" y2="225" stroke="#3B66A5" stroke-width="2.5"/></svg>`;
 }
 
 function renderWorks(filter = 'all') {
     worksGrid.innerHTML = '';
     const filtered = filter === 'all' ? worksData : worksData.filter(w => w.category === filter);
 
-    filtered.forEach(work => {
+// メモ帳の一番下が最新になるため、後ろから3件を取得して新しい順（逆順）に並べる
+    const latestThree = filtered.slice(-3).reverse();
+    
+    latestThree.forEach(work => {
         const card = document.createElement('div');
         card.className = 'bg-white border border-slate-200/90 overflow-hidden cut-card hover:shadow-lg hover:border-brand/50 transition-all duration-300 group cursor-pointer flex flex-col justify-between';
-        // YouTubeサムネイルを自動取得（画像がない場合はSVGフォールバック）
         const thumbUrl = `https://img.youtube.com/vi/${work.youtubeId}/hqdefault.jpg`;
 
         card.innerHTML = `
@@ -990,8 +965,6 @@ function renderWorks(filter = 'all') {
     });
 }
 
-renderWorks('all');
-
 filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         filterBtns.forEach(b => {
@@ -1004,7 +977,7 @@ filterBtns.forEach(btn => {
     });
 });
 
-// 6. 作品詳細モーダル制御
+// モーダル制御
 const workModal = document.getElementById('work-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const modalIframe = document.getElementById('modal-youtube-iframe');
@@ -1016,10 +989,8 @@ function openWorkModal(work) {
     document.getElementById('modal-song').textContent = work.song;
     document.getElementById('modal-desc').textContent = work.desc;
 
-    // YouTube埋め込みURLをセット（Shortsでも通常プレイヤーでそのまま再生可能）
     modalIframe.src = `https://www.youtube.com/embed/${work.youtubeId}`;
 
-    // 箇条書きリストを生成
     const detailsList = document.getElementById('modal-details-list');
     detailsList.innerHTML = work.details.map(item => `<li>${item}</li>`).join('');
 
@@ -1031,7 +1002,7 @@ function openWorkModal(work) {
 function closeWorkModal() {
     workModal.classList.add('hidden');
     workModal.classList.remove('flex');
-    modalIframe.src = ''; // モーダルを閉じたら動画再生を停止
+    modalIframe.src = 'about:blank';
     document.body.style.overflow = '';
 }
 
@@ -1039,6 +1010,9 @@ closeModalBtn.addEventListener('click', closeWorkModal);
 workModal.addEventListener('click', (e) => {
     if (e.target === workModal) closeWorkModal();
 });
+
+// 読み込み実行
+loadWorksFromTxt();
 
             // 7. FLOWセクション（合作の進め方）
             const flowSteps = [
