@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISSION & ABOUT | Project CUT-IN — Collaborative PV Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. 固定ヘッダー（TOPページと共通構造）
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <!-- ロゴ（クリックでTOPへ戻る） -->
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="index.html" class="hover:text-brand transition-colors py-1">TOP</a>
+                <a href="mission.html" class="text-brand border-b-2 border-brand py-1">MISSION</a>
+                <a href="index.html#news" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="index.html#works" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="index.html#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイル戻るボタン -->
+            <a href="index.html" class="lg:hidden font-mono text-xs font-bold text-ink-700 hover:text-brand border border-slate-200 px-3 py-1.5 cut-btn">
+                ← TOP
+            </a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. 下層ページ用サブヒーロー（パンくずリスト＋タイトル）
+    =========================================== -->
+    <section class="pt-32 pb-20 bg-surface-off border-b border-slate-200/80 relative overflow-hidden bg-studio-dots">
+        <div class="hidden lg:block absolute top-0 right-0 w-[35%] h-full bg-white/80 border-l border-slate-200/80" style="clip-path: polygon(22% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- パンくずリスト -->
+            <nav aria-label="パンくずリスト" class="flex items-center gap-2 font-mono text-[11px] font-semibold text-ink-500 mb-6">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand">MISSION & ABOUT</span>
+            </nav>
+
+            <div class="max-w-3xl space-y-5">
+                <div class="inline-flex items-center gap-2.5 px-3 py-1 bg-white border border-slate-200 text-brand font-mono text-[11px] font-bold tracking-[0.18em]">
+                    <span>01 / PHILOSOPHY & VISION</span>
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-black text-ink-900 leading-[1.18] tracking-tight">
+                    Break the Frame,<br>
+                    <span class="text-brand">Make the Spark.</span>
+                </h1>
+                <p class="text-base sm:text-lg font-bold text-ink-700">
+                    枠を破り、火花を散らせ。 — 個性が交差する、その一瞬を創る。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. MANIFESTO / 理念の背景
+    =========================================== -->
+    <section class="py-24 bg-surface-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start reveal-up">
+                <div class="lg:col-span-5">
+                    <div class="font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                        OUR MANIFESTO
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-ink-900 leading-snug">
+                        なぜ私たちは、<br>「合作」にこだわるのか。
+                    </h2>
+                </div>
+                <div class="lg:col-span-7 space-y-6 text-ink-700 text-sm sm:text-[15px] leading-[2.05]">
+                    <p>
+                        映像制作は孤独な作業になりがちです。1フレームの調整、1音の配置、1枚のイラストに何十時間も向き合いながら、たった一人で作品を完成させるクリエイターが多く存在します。
+                    </p>
+                    <p>
+                        しかし、異なる作風や専門技術を持つクリエイター同士が<strong>「同じ1本のタイムライン」</strong>の上で出会い、互いのパートを繋ぎ合わせたとき、個人の想像をはるかに超える熱量と化学反応が生まれます。
+                    </p>
+                    <p class="p-6 bg-surface-off border-l-4 border-brand font-medium text-ink-900">
+                        「それぞれの個性をぶつけ合う。皆それぞれの考えがあっていい。クリエーター魂を燃やせる場所を。」<br>
+                        Project CUT-INは、その信念のもと、すべての参加者が主役として輝ける合作制作スタジオを目指しています。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. 3 CORE VALUES（3つの行動指針・詳細版）
+    =========================================== -->
+    <section class="py-24 bg-surface-off border-t border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="max-w-3xl mb-16 reveal-up">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>THREE CORE VALUES</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    3つの制作指針
+                </h2>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Value 01 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-11 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8">
+                            <span class="font-mono text-xs font-bold text-brand bg-brand-light px-3 py-1">VALUE 01</span>
+                            <h3 class="text-2xl font-extrabold text-ink-900 mt-4">CROSSOVER</h3>
+                            <div class="text-sm font-bold text-brand mt-1">個性の交差と尊重</div>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm sm:text-[15px] text-ink-700 leading-[1.95]">
+                            <p>
+                                手描きアニメーション、モーショングラフィックス、3DCG、音MAD・リミックス音源など、使用ソフトや表現手法の枠を設けません。After Effects、AviUtl、CLIP STUDIO PAINT、Blender、YMM4など、各自が最も得意とする環境で培った個性をそのまま作品に持ち寄ることができます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value 02 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-11 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8">
+                            <span class="font-mono text-xs font-bold text-brand bg-brand-light px-3 py-1">VALUE 02</span>
+                            <h3 class="text-2xl font-extrabold text-ink-900 mt-4">SEAMLESS CUT</h3>
+                            <div class="text-sm font-bold text-brand mt-1">繋ぎ（カットイン）の美学</div>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm sm:text-[15px] text-ink-700 leading-[1.95]">
+                            <p>
+                                「1秒で、視線を奪う。次のパートが待ちきれなくなるPVを。」—— Project CUT-INが最も重視するのは、パートとパートが切り替わる瞬間の演出です。前後のクリエイター同士が動きのベクトルや色調、カメラワークのバトンを緻密に受け渡すことで、オムニバスでありながら1本の映画のような没入感を生み出します。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Value 03 -->
+                <div class="bg-white border border-slate-200/90 p-8 sm:p-11 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8">
+                            <span class="font-mono text-xs font-bold text-brand bg-brand-light px-3 py-1">VALUE 03</span>
+                            <h3 class="text-2xl font-extrabold text-ink-900 mt-4">CREATIVE STUDIO</h3>
+                            <div class="text-sm font-bold text-brand mt-1">制作チームとしての誠実さ</div>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm sm:text-[15px] text-ink-700 leading-[1.95]">
+                            <p>
+                                合作の途中で頓挫する「エタり」を防ぎ、すべてのクリエイターが安心して制作に没頭できるよう、明確なスケジュール設計、技術レギュレーションの事前共有、適切なクレジット表記と楽曲・素材の権利配慮を徹底しています。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         5. STUDIO PROFILE / 団体概要テーブル
+    =========================================== -->
+    <section class="py-24 bg-surface-white border-t border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-6 lg:px-10 reveal-up">
+            <div class="mb-12">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>STUDIO PROFILE</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-ink-900">
+                    団体概要
+                </h2>
+            </div>
+
+            <div class="border-t border-slate-200 divide-y divide-slate-200 text-sm">
+                <div class="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4 font-bold text-ink-900">団体名</div>
+                    <div class="sm:col-span-8 text-ink-700 font-mono font-semibold">Project CUT-IN（プロジェクト・カットイン）</div>
+                </div>
+                <div class="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4 font-bold text-ink-900">コンセプト・目標</div>
+                    <div class="sm:col-span-8 text-ink-700">1秒で、視線を奪う。 — 個性が交差する、その一瞬を創る。</div>
+                </div>
+                <div class="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4 font-bold text-ink-900">主な活動内容</div>
+                    <div class="sm:col-span-8 text-ink-700">合作PV・MVの企画立案、ディレクション、映像・イラスト・音源の共同制作および公開</div>
+                </div>
+                <div class="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4 font-bold text-ink-900">標準制作フォーマット</div>
+                    <div class="sm:col-span-8 text-ink-700 font-mono">1920×1080 (Full HD) / 60fps / YouTube & Shorts 対応</div>
+                </div>
+                <div class="py-5 grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4 font-bold text-ink-900">主な連絡・進行ツール</div>
+                    <div class="sm:col-span-8 text-ink-700 font-mono">Discord / Google Workspace / Notion</div>
+                </div>
+            </div>
+
+            <!-- 下部ナビゲーションCTA -->
+            <div class="mt-16 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="index.html" class="w-full sm:w-auto px-7 py-3.5 bg-surface-off border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-wider cut-btn text-center transition-colors">
+                    ← BACK TO TOP / トップページへ戻る
+                </a>
+                <a href="index.html#join" class="w-full sm:w-auto px-8 py-3.5 bg-brand text-white font-mono text-xs font-bold tracking-wider cut-btn btn-cut-hover text-center shadow-sm">
+                    JOIN US / 合作に参加する →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         6. フッター
+    =========================================== -->
+    <footer class="bg-surface-off border-t border-slate-200/80 py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-4">
+            <p>&copy; 2026 Project CUT-IN.</p>
+            <p>COLLABORATIVE PV STUDIO // AICHI</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+        });
+    </script>
+</body>
+</html>
