@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORKS ARCHIVE | Project CUT-IN — 制作実績・全作品一覧</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F8FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2B4C7E;
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. 固定ヘッダー（トップページと共通デザイン）
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="index.html#mission" class="hover:text-brand transition-colors py-1">MISSION</a>
+                <a href="index.html#news" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="works.html" class="text-brand border-b-2 border-brand py-1">WORKS</a>
+                <a href="index.html#comment" class="hover:text-brand transition-colors py-1">COMMENT</a>
+                <a href="index.html#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-ink-900 hover:text-brand focus:outline-none" aria-label="メニューを開く">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- モバイルドロップダウンメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-3.5 text-xs font-bold tracking-widest">
+            <a href="index.html" class="block py-1.5 text-ink-700 hover:text-brand">TOP PAGE / トップへ戻る</a>
+            <a href="index.html#mission" class="block py-1.5 text-ink-700 hover:text-brand">01. MISSION</a>
+            <a href="index.html#news" class="block py-1.5 text-ink-700 hover:text-brand">02. NEWS</a>
+            <a href="works.html" class="block py-1.5 text-brand">03. WORKS (CURRENT)</a>
+            <a href="index.html#comment" class="block py-1.5 text-ink-700 hover:text-brand">04. COMMENT</a>
+            <a href="index.html#flow" class="block py-1.5 text-ink-700 hover:text-brand">05. FLOW</a>
+            <a href="index.html#join" class="block py-3 text-center bg-brand text-white cut-btn mt-2">ENTRY / 合作に参加する</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. ページヘッダー（パンくずリスト＆タイトル）
+    =========================================== -->
+    <section class="pt-32 pb-16 bg-surface-off border-b border-slate-200/80 relative bg-studio-dots">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- パンくずリスト -->
+            <nav aria-label="Breadcrumb" class="flex items-center gap-2 font-mono text-[11px] font-semibold text-ink-500 mb-6">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand font-bold">WORKS ARCHIVE</span>
+            </nav>
+
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+                <div>
+                    <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                        <span class="w-6 h-[1.5px] bg-brand"></span>
+                        <span>COMPLETE PROJECT DATABASE</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-black text-ink-900 tracking-tight">
+                        WORKS ARCHIVE
+                    </h1>
+                    <p class="mt-3 text-ink-500 text-sm sm:text-base max-w-2xl leading-relaxed">
+                        Project CUT-INがこれまでに制作・公開した合作PVの全アーカイブです。各作品を選択すると、YouTube動画本編の再生と制作スタッフ・制作日の詳細をご覧いただけます。
+                    </p>
+                </div>
+
+                <!-- 総作品数カウンター -->
+                <div class="bg-white border border-slate-200 px-6 py-4 cut-card shrink-0">
+                    <div class="font-mono text-[10px] font-bold text-ink-500 tracking-wider">SHOWING PROJECTS</div>
+                    <div class="font-mono text-2xl font-extrabold text-ink-900 mt-0.5">
+                        <span id="visible-count" class="text-brand">0</span> <span class="text-sm text-ink-500 font-normal">/ <span id="total-count">0</span> WORKS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. 検索＆マルチフィルターバー
+    =========================================== -->
+    <section class="py-8 bg-white border-b border-slate-200/80 sticky top-20 z-30 shadow-sm shadow-slate-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+                
+                <!-- フォーマットフィルター（ALL / LONG PV / SHORTS） -->
+                <div class="flex flex-wrap items-center gap-2" id="format-filter-group">
+                    <button type="button" data-format="all" class="format-btn active px-4 py-2 text-xs font-mono font-bold tracking-wider bg-ink-900 text-white cut-btn">
+                        ALL FORMATS
+                    </button>
+                    <button type="button" data-format="long" class="format-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        LONG PV (16:9)
+                    </button>
+                    <button type="button" data-format="shorts" class="format-btn px-4 py-2 text-xs font-mono font-bold tracking-wider bg-surface-off text-ink-700 hover:bg-slate-200/80 cut-btn">
+                        SHORTS (9:16)
+                    </button>
+                </div>
+
+                <!-- 年度セレクト ＆ キーワード検索 -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <select id="year-filter" aria-label="制作年度で絞り込み" class="px-4 py-2 bg-surface-off border border-slate-200 text-ink-900 font-mono text-xs font-bold focus:outline-none focus:border-brand">
+                        <option value="all">YEAR: ALL</option>
+                        <option value="2026">YEAR: 2026</option>
+                        <option value="2025">YEAR: 2025</option>
+                        <option value="2024">YEAR: 2024</option>
+                    </select>
+
+                    <div class="relative min-w-[240px]">
+                        <input type="text" id="search-input" placeholder="タイトル・楽曲・スタッフ名で検索..."
+                            class="w-full pl-9 pr-4 py-2 bg-surface-off border border-slate-200 text-ink-900 text-xs focus:outline-none focus:bg-white focus:border-brand transition-colors">
+                        <svg class="w-4 h-4 text-ink-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. 作品アーカイブ一覧グリッド
+    =========================================== -->
+    <main class="py-20 bg-surface-white min-h-[60vh]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- 作品カードグリッド -->
+            <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- JSで動的生成 -->
+            </div>
+
+            <!-- 検索結果0件時のメッセージ -->
+            <div id="empty-state" class="hidden py-20 text-center border border-dashed border-slate-300 bg-surface-off cut-card">
+                <p class="font-mono text-sm font-bold text-ink-700 mb-2">NO MATCHING WORKS FOUND</p>
+                <p class="text-xs text-ink-500 mb-6">条件に一致する作品が見つかりませんでした。検索ワードやフィルターを変更してお試しください。</p>
+                <button type="button" id="reset-filters-btn" class="px-6 py-2.5 bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-brand transition-colors">
+                    RESET FILTERS / 条件をリセット
+                </button>
+            </div>
+
+            <!-- トップページへ戻る導線 -->
+            <div class="mt-20 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="index.html" class="inline-flex items-center gap-3 px-7 py-3.5 bg-surface-off border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.14em] cut-btn transition-all group">
+                    <span class="text-brand group-hover:-translate-x-1 transition-transform">←</span>
+                    <span>BACK TO TOP / トップページへ戻る</span>
+                </a>
+
+                <a href="index.html#join" class="inline-flex items-center gap-3 px-7 py-3.5 bg-brand text-white font-mono text-xs font-bold tracking-[0.14em] cut-btn btn-cut-hover shadow-sm">
+                    <span>JOIN NEXT PROJECT / 次回合作に参加する</span>
+                    <span>→</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==========================================
+         5. フッター
+    =========================================== -->
+    <footer class="bg-surface-off border-t border-slate-200/80 py-14">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-6 h-6 bg-ink-900 flex items-center justify-center cut-btn">
+                            <div class="w-[2px] h-7 bg-brand-accent rotate-[28deg]"></div>
+                            <div class="w-[1.5px] h-7 bg-white rotate-[28deg] ml-0.5"></div>
+                        </div>
+                        <span class="font-extrabold tracking-tight text-lg text-ink-900">
+                            Project <span class="text-brand">CUT-IN</span>
+                        </span>
+                    </div>
+                    <p class="text-xs font-medium text-ink-500 mt-2">
+                        個性が交差する。その一瞬を創る。
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 text-xs font-bold text-ink-700">
+                    <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                    <a href="index.html#mission" class="hover:text-brand transition-colors">MISSION</a>
+                    <a href="index.html#news" class="hover:text-brand transition-colors">NEWS</a>
+                    <a href="works.html" class="text-brand">WORKS</a>
+                    <a href="index.html#comment" class="hover:text-brand transition-colors">COMMENT</a>
+                    <a href="index.html#flow" class="hover:text-brand transition-colors">FLOW</a>
+                    <a href="index.html#join" class="hover:text-brand transition-colors">JOIN US</a>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-2">
+                <p>&copy; 2026 Project CUT-IN.</p>
+                <p>COLLABORATIVE PV STUDIO // AICHI</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         作品詳細モーダル（YouTube埋め込み＋箇条書き制作情報）
+    =========================================== -->
+    <div id="work-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/75 backdrop-blur-sm">
+        <div class="bg-white border border-slate-200 w-full max-w-3xl max-h-[90vh] overflow-y-auto cut-card shadow-2xl relative">
+            <div class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand">
+                    <span id="modal-year">2026</span>
+                    <span class="text-slate-300">/</span>
+                    <span id="modal-category-badge">LONG PV (16:9)</span>
+                </div>
+                <button id="close-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-7">
+                <!-- YouTube動画埋め込みエリア -->
+                <div class="relative w-full aspect-video bg-ink-950 border border-slate-200 overflow-hidden">
+                    <iframe id="modal-youtube-iframe" class="w-full h-full" src="about:blank" title="YouTube video player" style="border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <!-- タイトル・解説 -->
+                <div>
+                    <h3 id="modal-title" class="text-2xl font-extrabold text-ink-900 tracking-tight mb-1.5">作品タイトル</h3>
+                    <p id="modal-song" class="font-mono text-xs font-semibold text-brand mb-4">使用楽曲</p>
+                    <p id="modal-desc" class="text-ink-500 text-sm leading-[1.9]">解説文</p>
+                </div>
+
+                <!-- 制作情報・担当スタッフ（箇条書き） -->
+                <div class="bg-surface-off p-6 border border-slate-200/90">
+                    <h4 class="font-mono text-xs font-bold text-ink-900 tracking-wider mb-4 border-b border-slate-200 pb-2">
+                        PRODUCTION DETAILS / 制作データ・担当スタッフ
+                    </h4>
+                    <ul id="modal-details-list" class="space-y-2.5 text-sm text-ink-700 list-disc list-inside">
+                        <!-- JSで箇条書き生成 -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         JavaScript（検索・フィルター・モーダル制御）
+    =========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    // モバイルメニュー開閉
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+
+    let worksData = [];
+
+    const worksGrid = document.getElementById('works-grid');
+    const emptyState = document.getElementById('empty-state');
+    const visibleCountEl = document.getElementById('visible-count');
+    const totalCountEl = document.getElementById('total-count');
+
+    const formatBtns = document.querySelectorAll('.format-btn');
+    const yearSelect = document.getElementById('year-filter');
+    const searchInput = document.getElementById('search-input');
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+
+    let activeFormat = 'all';
+    let activeYear = 'all';
+    let searchQuery = '';
+
+    // works.txt からデータを読み込む非同期関数
+    async function loadWorksFromTxt() {
+        try {
+            const res = await fetch('works.txt');
+            if (!res.ok) throw new Error('works.txt の読み込みに失敗しました');
+            const text = await res.text();
+
+            worksData = text
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line && !line.startsWith('#')) // 空行とコメント行を除外
+                .map((line, index) => {
+                    const cols = line.split('|').map(c => c.trim());
+                    const cat = (cols[2] || 'long').toLowerCase();
+                    return {
+                        id: index + 1,
+                        year: cols[0] || '',
+                        title: cols[1] || '',
+                        category: cat,
+                        categoryLabel: cat === 'shorts' ? 'SHORTS (9:16)' : 'LONG PV (16:9)',
+                        youtubeId: cols[3] || '',
+                        duration: cols[4] || '',
+                        song: cols[5] || '',
+                        desc: cols[6] || '',
+                        details: cols[7] ? cols[7].split(';;').map(d => d.trim()) : []
+                    };
+                })
+                .reverse(); // メモ帳の下（最新）が先頭に来るように逆順にする
+
+            if (totalCountEl) totalCountEl.textContent = worksData.length;
+            renderWorks();
+        } catch (err) {
+            console.error(err);
+            if (worksGrid) {
+                worksGrid.innerHTML = `<p class="col-span-full text-xs font-mono text-ink-500">※ローカル環境（file://）ではブラウザの制限により works.txt を読み込めない場合があります。VS Code の Live Server 等をご利用ください。</p>`;
+            }
+        }
+    }
+
+    function renderWorks() {
+        if (!worksGrid) return;
+        worksGrid.innerHTML = '';
+
+        const filtered = worksData.filter(work => {
+            const matchFormat = activeFormat === 'all' || work.category === activeFormat;
+            const matchYear = activeYear === 'all' || work.year === activeYear;
+            const q = searchQuery.toLowerCase();
+            const matchQuery = !q ||
+                work.title.toLowerCase().includes(q) ||
+                work.song.toLowerCase().includes(q) ||
+                work.desc.toLowerCase().includes(q) ||
+                work.details.some(d => d.toLowerCase().includes(q));
+
+            return matchFormat && matchYear && matchQuery;
+        });
+
+        if (visibleCountEl) visibleCountEl.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            worksGrid.classList.add('hidden');
+            if (emptyState) emptyState.classList.remove('hidden');
+            return;
+        }
+
+        worksGrid.classList.remove('hidden');
+        if (emptyState) emptyState.classList.add('hidden');
+
+        filtered.forEach(work => {
+            const card = document.createElement('div');
+            card.className = 'bg-white border border-slate-200/90 overflow-hidden cut-card hover:shadow-lg hover:border-brand/50 transition-all duration-300 group cursor-pointer flex flex-col justify-between';
+            const thumbUrl = `https://img.youtube.com/vi/${work.youtubeId}/hqdefault.jpg`;
+
+            card.innerHTML = `
+                <div>
+                    <div class="relative aspect-video overflow-hidden border-b border-slate-200/80 bg-surface-off">
+                        <img src="${thumbUrl}" alt="${work.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3.5 left-4 right-4 flex items-center justify-between">
+                            <span class="px-2.5 py-1 bg-white/95 backdrop-blur border border-slate-200 font-mono text-[10px] font-bold text-brand tracking-wider">
+                                ${work.categoryLabel}
+                            </span>
+                            <span class="px-2 py-0.5 bg-ink-900 text-white font-mono text-[10px] font-semibold">
+                                ${work.year}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 right-4 font-mono text-[10px] font-bold text-ink-700 bg-white/95 px-2 py-0.5 border border-slate-200">
+                            ${work.duration}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="font-mono text-[11px] font-semibold text-ink-500 mb-1.5 truncate">${work.song}</div>
+                        <h2 class="text-lg font-extrabold text-ink-900 group-hover:text-brand transition-colors mb-2.5">${work.title}</h2>
+                        <p class="text-sm text-ink-500 line-clamp-2 leading-relaxed">${work.desc}</p>
+                    </div>
+                </div>
+                <div class="px-6 py-3.5 bg-surface-off border-t border-slate-200/70 flex items-center justify-between font-mono text-[11px] font-bold">
+                    <span class="text-ink-700">${work.category === 'shorts' ? 'VERTICAL / SHORTS' : 'WIDESCREEN / LONG'}</span>
+                    <span class="text-brand group-hover:translate-x-1 transition-transform">WATCH & DETAILS →</span>
+                </div>
+            `;
+            card.addEventListener('click', () => openWorkModal(work));
+            worksGrid.appendChild(card);
+        });
+    }
+
+    // フォーマットボタンイベント
+    formatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            formatBtns.forEach(b => {
+                b.classList.remove('active', 'bg-ink-900', 'text-white');
+                b.classList.add('bg-surface-off', 'text-ink-700');
+            });
+            btn.classList.add('active', 'bg-ink-900', 'text-white');
+            btn.classList.remove('bg-surface-off', 'text-ink-700');
+            activeFormat = btn.dataset.format;
+            renderWorks();
+        });
+    });
+
+    // 年度フィルターイベント
+    if (yearSelect) {
+        yearSelect.addEventListener('change', (e) => {
+            activeYear = e.target.value;
+            renderWorks();
+        });
+    }
+
+    // 検索入力イベント
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            renderWorks();
+        });
+    }
+
+    // リセットボタン
+    if (resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', () => {
+            activeFormat = 'all';
+            activeYear = 'all';
+            searchQuery = '';
+            if (yearSelect) yearSelect.value = 'all';
+            if (searchInput) searchInput.value = '';
+            formatBtns.forEach(b => {
+                b.classList.remove('active', 'bg-ink-900', 'text-white');
+                b.classList.add('bg-surface-off', 'text-ink-700');
+            });
+            if (formatBtns[0]) {
+                formatBtns[0].classList.add('active', 'bg-ink-900', 'text-white');
+                formatBtns[0].classList.remove('bg-surface-off', 'text-ink-700');
+            }
+            renderWorks();
+        });
+    }
+
+    // モダル制御
+    const workModal = document.getElementById('work-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modalIframe = document.getElementById('modal-youtube-iframe');
+
+    function openWorkModal(work) {
+        const mYear = document.getElementById('modal-year');
+        const mCat = document.getElementById('modal-category-badge');
+        const mTitle = document.getElementById('modal-title');
+        const mSong = document.getElementById('modal-song');
+        const mDesc = document.getElementById('modal-desc');
+
+        if (mYear) mYear.textContent = work.year;
+        if (mCat) mCat.textContent = work.categoryLabel;
+        if (mTitle) mTitle.textContent = work.title;
+        if (mSong) mSong.textContent = work.song;
+        if (mDesc) mDesc.textContent = work.desc;
+
+        if (modalIframe) {
+            modalIframe.src = `https://www.youtube.com/embed/${work.youtubeId}`;
+        }
+
+        const detailsList = document.getElementById('modal-details-list');
+        if (detailsList) {
+            detailsList.innerHTML = work.details.map(item => `<li>${item}</li>`).join('');
+        }
+
+        if (workModal) {
+            workModal.classList.remove('hidden');
+            workModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeWorkModal() {
+        if (workModal) {
+            workModal.classList.add('hidden');
+            workModal.classList.remove('flex');
+        }
+        if (modalIframe) modalIframe.src = 'about:blank';
+        document.body.style.overflow = '';
+    }
+
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeWorkModal);
+    if (workModal) {
+        workModal.addEventListener('click', (e) => {
+            if (e.target === workModal) closeWorkModal();
+        });
+    }
+
+    // 読み込み実行
+    loadWorksFromTxt();
+});
+    </script>
+</body>
+</html>
