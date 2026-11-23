@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISSION & ABOUT | Project CUT-IN — Collaborative PV Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. 固定ヘッダー（TOPページと共通構造）
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <!-- ロゴ（クリックでTOPへ戻る） -->
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="index.html" class="hover:text-brand transition-colors py-1">TOP</a>
+                <a href="mission.html" class="text-brand border-b-2 border-brand py-1">MISSION</a>
+                <a href="index.html#news" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="index.html#works" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="index.html#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイル戻るボタン -->
+            <a href="index.html" class="lg:hidden font-mono text-xs font-bold text-ink-700 hover:text-brand border border-slate-200 px-3 py-1.5 cut-btn">
+                ← TOP
+            </a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. 下層ページ用サブヒーロー（パンくずリスト＋タイトル）
+    =========================================== -->
+    <section class="pt-32 pb-20 bg-surface-off border-b border-slate-200/80 relative overflow-hidden bg-studio-dots">
+        <div class="hidden lg:block absolute top-0 right-0 w-[35%] h-full bg-white/80 border-l border-slate-200/80" style="clip-path: polygon(22% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- パンくずリスト -->
+            <nav aria-label="パンくずリスト" class="flex items-center gap-2 font-mono text-[11px] font-semibold text-ink-500 mb-6">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand">Sorry.This page not works now.</span>
+            </nav>
+
+            <div class="max-w-3xl space-y-5">
+                <h1 class="text-4xl sm:text-5xl lg:text-[52px] font-black text-ink-900 leading-[1.18] tracking-tight">
+                    このページは<br>
+                    <span class="text-brand">現在利用できません</span>
+                </h1>
+                <p class="text-base sm:text-lg font-bold text-ink-700">
+                    このページは現在更新中か、<br>存在していないなどの理由で利用できません。
+                </p>
+            </div>
+        </div>
+    </section>
+    <!-- ==========================================
+         5. STUDIO PROFILE / 団体概要テーブル
+    =========================================== -->
+    <section class="py-24 bg-surface-white border-t border-slate-200/80">
+        <div class="max-w-5xl mx-auto px-6 lg:px-10 reveal-up">
+            <!-- 下部ナビゲーションCTA -->
+            <div class="mt-16 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="index.html" class="w-full sm:w-auto px-7 py-3.5 bg-surface-off border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-wider cut-btn text-center transition-colors">
+                    ← BACK TO TOP / トップページへ戻る
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         6. フッター
+    =========================================== -->
+    <footer class="bg-surface-off border-t border-slate-200/80 py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-4">
+            <p>&copy; 2026 Project CUT-IN.</p>
+            <p>COLLABORATIVE PV STUDIO // AICHI</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+        });
+    </script>
+</body>
+</html>
