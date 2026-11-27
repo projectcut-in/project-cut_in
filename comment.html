@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMMENT / 創立者・メンバーメッセージ | Project CUT-IN</title>
+        <!-- ファビコン（タブのアイコン）の設定 -->
+    <link rel="icon" type="image/png" href="Project Cutin.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. 固定ヘッダー（トップページと共通デザイン）
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- ナビゲーション -->
+            <nav class="hidden md:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="index.html#mission" class="hover:text-brand transition-colors py-1">MISSION</a>
+                <a href="index.html#news" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="index.html#works" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="comment.html" class="text-brand border-b-2 border-brand py-1">COMMENT</a>
+                <a href="index.html#flow" class="hover:text-brand transition-colors py-1">FLOW</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- トップに戻る（モバイル用） -->
+            <a href="index.html" class="md:hidden font-mono text-xs font-bold text-ink-700 hover:text-brand">
+                ← TOP
+            </a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. ページタイトルヘッダー（サブページ専用）
+    =========================================== -->
+    <section class="pt-36 pb-16 bg-surface-off border-b border-slate-200/80 relative bg-studio-dots">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- パンくずリスト -->
+            <nav class="font-mono text-[11px] font-semibold text-ink-500 mb-6 flex items-center gap-2">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand">COMMENT</span>
+            </nav>
+
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>CREATOR & FOUNDER VOICES</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-extrabold text-ink-900 tracking-tight leading-tight">
+                    COMMENT <span class="text-ink-500 text-lg sm:text-2xl font-bold block sm:inline sm:ml-3">/ 創立者・メンバーメッセージ</span>
+                </h1>
+                <p class="mt-5 text-ink-500 text-sm sm:text-[15px] leading-[1.95]">
+                    Project CUT-INを立ち上げた創立者の想いと、これまでの合作PV制作に参加した各パートのクリエイターから寄せられたリアルな声をご紹介します。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. 創立者メッセージ（FEATURED FOUNDER'S MESSAGE）
+    =========================================== -->
+    <section class="py-24 bg-surface-white border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="font-mono text-xs font-bold text-brand tracking-[0.2em] mb-8 reveal-up">
+                01 // FOUNDER'S STATEMENT
+            </div>
+
+            <div class="bg-surface-off border border-slate-200/90 p-8 sm:p-12 lg:p-14 cut-card reveal-up">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                    <!-- プロフィール枠 -->
+                    <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-8 lg:pb-0 lg:pr-10">
+                        <div class="inline-block font-mono text-[10px] font-bold text-white bg-ink-900 px-3 py-1 tracking-widest mb-4">
+                            FOUNDER / REPRESENTATIVE
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight">
+                            創立者名 なーさい
+                        </h2>
+                        <p class="font-mono text-xs text-brand font-semibold mt-1.5">
+                            Project CUT-IN 創立者・代表ディレクター
+                        </p>
+
+                        <div class="mt-6 pt-6 border-t border-slate-200/80 space-y-2 font-mono text-[11px] text-ink-500">
+                            <div>SPECIALTY: Motion/Character video</div>
+                            <div>PROJECTS: 全合作プロジェクト企画・統括</div>
+                        </div>
+                    </div>
+
+                    <!-- メッセージ本文 -->
+                    <div class="lg:col-span-8 space-y-6">
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-ink-900 leading-[1.6]">
+                            「それぞれの個性をぶつけ合い、クリエーター魂を燃やせる場所を創りたい。」
+                        </h3>
+                        <div class="space-y-4 text-ink-700 text-sm sm:text-[15px] leading-[2.05]">
+                            <p>
+                                私はもともとそのような文字PVだとか、モーショングラフィックスとか、作ることがそこまで好きではありませんでした。ですが、中1の頃にとあるPVなどを制作されているYouTubeクリエーターの方に出会いました。 そこで私はありきたりな表現ですが全身に電流が走ったかのようにビビビっと来てしまったんです。それに私は感化されて、文字PVだとかを作り始めたんですが、思うようにうまく行かず途中で断念して放棄しちゃいました。 ですが、中2の私は優秀でした。その途中のymmp.って言うんですけどね、プロジェクトファイルを見つけて、また1から編集し始めて、ちょっとYouTubeに投稿したんですよ。そしたら、想いのほか見てくれることが嬉しくて。
+                            </p>
+                            <p>
+                                ですが、完成できたのはその頃の友のおかげでした。その友と協力して作り上げた、あの経験は今の私でもとても大切な経験となっています。皆さんにもそのような言葉にできないあの経験をこのプラットホームを通して経験してほしいです。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. 参加クリエイター・運営メンバーの声一覧
+    =========================================== -->
+    <section class="py-24 bg-surface-off">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <!-- ヘッダー＆パート別フィルター -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 reveal-up">
+                <div>
+                    <div class="font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                        02 // CREATOR VOICES
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-ink-900 tracking-tight">
+                        PARTICIPANTS <span class="text-ink-500 text-base font-bold ml-2">/ 参加クリエイターの声</span>
+                    </h2>
+                </div>
+
+                <!-- フィルターボタン -->
+                <div class="flex flex-wrap gap-2" id="comment-filter-container">
+                    <button type="button" data-role-filter="all" class="c-filter-btn active px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-ink-900 text-white cut-btn">
+                        ALL
+                    </button>
+                    <button type="button" data-role-filter="MOTION" class="c-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-white border border-slate-200 text-ink-700 hover:border-brand cut-btn">
+                        MOTION
+                    </button>
+                    <button type="button" data-role-filter="ILLUSTRATOR" class="c-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-white border border-slate-200 text-ink-700 hover:border-brand cut-btn">
+                        ILLUSTRATOR
+                    </button>
+                    <button type="button" data-role-filter="SOUND" class="c-filter-btn px-4 py-2 text-[11px] font-mono font-bold tracking-wider bg-white border border-slate-200 text-ink-700 hover:border-brand cut-btn">
+                        SOUND & MIX
+                    </button>
+                </div>
+            </div>
+
+            <!-- コメントカードグリッド（JSで動的生成） -->
+            <div id="creator-comments-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 reveal-up">
+                <!-- JSで生成されます -->
+            </div>
+
+            <!-- トップページへ戻る＆応募への導線 -->
+            <div class="mt-20 pt-12 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 reveal-up">
+                <a href="index.html" class="w-full sm:w-auto px-8 py-4 bg-white border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.14em] cut-btn transition-colors text-center">
+                    ← BACK TO TOP / トップページへ戻る
+                </a>
+                <a href="index.html#join" class="w-full sm:w-auto px-8 py-4 bg-brand text-white font-mono text-xs font-bold tracking-[0.14em] cut-btn btn-cut-hover shadow-sm text-center">
+                    JOIN US / 合作にエントリーする →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         5. フッター
+    =========================================== -->
+    <footer class="bg-surface-white border-t border-slate-200/80 py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-4">
+            <div class="flex items-center gap-2.5">
+                <span class="font-sans font-extrabold text-base text-ink-900">Project <span class="text-brand">CUT-IN</span></span>
+                <span>— 個性が交差する。その一瞬を創る。</span>
+            </div>
+            <p>&copy; 2026 Project CUT-IN.</p>
+        </div>
+    </footer>
+
+    <!-- ==========================================
+         JavaScript（コメントデータ・フィルター・出現アニメーション）
+    =========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // スクロール出現アニメーション
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 参加クリエイターコメントデータ
+            const commentsData = [
+                {
+                    name: "TEST",
+                    role: "ILLUSTRATOR",
+                    roleLabel: "ILLUSTRATOR",
+                    work: "『 』",
+                    quote: "test"
+                },
+                {
+                    name: "TEST",
+                    role: "MOTION",
+                    roleLabel: "MOTION DESIGNER",
+                    work: "『 』",
+                    quote: "test"
+                },
+                {
+                    name: "TEST",
+                    role: "SOUND",
+                    roleLabel: "SOUND & MIX / SFX",
+                    work: "『 』",
+                    quote: "test"
+                },
+                {
+                    name: "TEST",
+                    role: "MOTION",
+                    roleLabel: "MOTION GRAPHICS / 3DCG",
+                    work: "『 』",
+                    quote: "test"
+                },
+                {
+                    name: "TEST",
+                    role: "ILLUSTRATOR",
+                    roleLabel: "CHARACTER ILLUSTRATOR",
+                    work: "『 』",
+                    quote: "test"
+                },
+                {
+                    name: "TEST",
+                    role: "SOUND",
+                    roleLabel: "REMIX & COMPOSER",
+                    work: "『 』",
+                    quote: "test"
+                }
+            ];
+
+            const gridEl = document.getElementById('creator-comments-grid');
+            const filterBtns = document.querySelectorAll('.c-filter-btn');
+
+            function renderComments(filter = 'all') {
+                gridEl.innerHTML = '';
+                const items = filter === 'all' ? commentsData : commentsData.filter(c => c.role === filter);
+
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white border border-slate-200/90 p-7 sm:p-8 cut-card flex flex-col justify-between hover:border-brand/40 hover:shadow-md transition-all duration-300';
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex items-center justify-between mb-5">
+                                <span class="font-mono text-[10px] font-bold text-brand bg-brand-light px-2.5 py-1 tracking-wider">
+                                    ${item.roleLabel}
+                                </span>
+                                <span class="font-serif text-2xl text-ink-300 leading-none">“</span>
+                            </div>
+                            <p class="text-ink-700 text-sm leading-[1.95] mb-6">
+                                ${item.quote}
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <div class="text-sm font-extrabold text-ink-900">${item.name}</div>
+                            <span class="font-mono text-[10px] text-ink-500 truncate">${item.work}</span>
+                        </div>
+                    `;
+                    gridEl.appendChild(card);
+                });
+            }
+
+            renderComments('all');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'bg-ink-900', 'text-white');
+                        b.classList.add('bg-white', 'border', 'border-slate-200', 'text-ink-700');
+                    });
+                    btn.classList.add('active', 'bg-ink-900', 'text-white');
+                    btn.classList.remove('bg-white', 'border', 'border-slate-200', 'text-ink-700');
+                    renderComments(btn.dataset.roleFilter);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLOW & GUIDELINES | Project CUT-IN — Collaborative PV Studio</title>
+        <!-- ファビコン（タブのアイコン）の設定 -->
+    <link rel="icon" type="image/png" href="Project Cutin.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Noto Sans JP, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #161C27;
+            overflow-x: hidden;
+            letter-spacing: 0.025em;
+        }
+
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 32px 32px;
+        }
+
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .btn-cut-hover {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-cut-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 120%;
+            height: 100%;
+            background: #161C27;
+            transform: skewX(-20deg);
+            transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+        .btn-cut-hover:hover::before {
+            left: -10%;
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F7F8FA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2B4C7E;
+        }
+    </style>
+</head>
+<body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
+
+    <!-- ==========================================
+         1. 共通固定ヘッダー
+    =========================================== -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white/92 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3.5 group">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center relative overflow-hidden cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg] transform group-hover:scale-y-125 group-hover:bg-white transition-all duration-300"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1 transform group-hover:translate-x-0.5 transition-transform duration-300"></div>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold tracking-tight text-lg sm:text-xl text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span>
+                    </span>
+                    <span class="font-mono text-[9px] text-ink-500 tracking-[0.22em] mt-1">COLLABORATIVE PV STUDIO</span>
+                </div>
+            </a>
+
+            <!-- デスクトップナビゲーション -->
+            <nav class="hidden lg:flex items-center gap-8 text-[11px] font-bold tracking-[0.16em] text-ink-700">
+                <a href="mission.html" class="hover:text-brand transition-colors py-1">MISSION</a>
+                <a href="news.html" class="hover:text-brand transition-colors py-1">NEWS</a>
+                <a href="works.html" class="hover:text-brand transition-colors py-1">WORKS</a>
+                <a href="comment.html" class="hover:text-brand transition-colors py-1">COMMENT</a>
+                <a href="flow.html" class="text-brand border-b-2 border-brand py-1">FLOW</a>
+                <a href="index.html#join" class="px-6 py-2.5 bg-brand text-white font-bold tracking-[0.16em] cut-btn btn-cut-hover shadow-sm">
+                    ENTRY
+                </a>
+            </nav>
+
+            <!-- モバイルメニューボタン -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 text-ink-900 hover:text-brand focus:outline-none" aria-label="メニューを開く">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- モバイルドロップダウンメニュー -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-slate-200 px-6 py-6 space-y-3.5 text-xs font-bold tracking-widest">
+            <a href="index.html" class="block py-1.5 text-ink-500 hover:text-brand">TOP PAGE / ホームへ戻る</a>
+            <a href="mission.html" class="block py-1.5 text-ink-700 hover:text-brand">01. MISSION</a>
+            <a href="news.html" class="block py-1.5 text-ink-700 hover:text-brand">02. NEWS</a>
+            <a href="works.html" class="block py-1.5 text-ink-700 hover:text-brand">03. WORKS</a>
+            <a href="comment.html" class="block py-1.5 text-ink-700 hover:text-brand">04. COMMENT</a>
+            <a href="flow.html" class="block py-1.5 text-brand">05. FLOW (CURRENT)</a>
+            <a href="index.html#join" class="block py-3 text-center bg-brand text-white cut-btn mt-2">ENTRY / 合作に参加する</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         2. 下層ページヘッダー
+    =========================================== -->
+    <section class="pt-32 pb-20 bg-surface-off border-b border-slate-200/80 relative overflow-hidden">
+        <div class="hidden lg:block absolute top-0 right-0 w-[38%] h-full bg-white border-l border-slate-200/80" style="clip-path: polygon(22% 0, 100% 0, 100% 100%, 0% 100%);"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+            <nav class="flex items-center gap-2 font-mono text-[11px] text-ink-500 mb-6">
+                <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                <span>/</span>
+                <span class="text-brand font-bold">FLOW & GUIDELINES</span>
+            </nav>
+
+            <div class="max-w-3xl">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>05 / PRODUCTION WORKFLOW & SPECS</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-black text-ink-900 tracking-tight leading-[1.18] mb-5">
+                    FLOW & GUIDELINES
+                </h1>
+                <p class="text-ink-500 text-sm sm:text-base leading-[1.95]">
+                    Project CUT-INにおける合作制作の進行プロセス、全クリエイター共通の技術レギュレーション（納品仕様）、および初参加の方からよく寄せられる質問（FAQ）をまとめています。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         3. DETAILED 5 STEPS / 制作進行プロセスの詳細タイムライン
+    =========================================== -->
+    <section class="py-24 bg-surface-white border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="max-w-2xl mb-14 reveal-up">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>PRODUCTION STEPS</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    企画から公開までの5ステップ
+                </h2>
+                <p class="text-sm text-ink-500 mt-3 leading-relaxed">
+                    標準的な1プロジェクト（約6週間）の進行モデルです。Discord専用サーバー上で進捗を可視化しながら進めます。
+                </p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- STEP 01 -->
+                <div class="bg-surface-off border border-slate-200/90 p-7 sm:p-9 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-4 lg:pb-0 lg:pr-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs font-extrabold text-white bg-brand px-3 py-1">STEP 01</span>
+                                <span class="font-mono text-xs font-bold text-ink-500">WEEK 01</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-ink-900 mt-2">企画・コンセプト策定</h3>
+                            <p class="font-mono text-[11px] text-brand mt-1">CONCEPT & PLANNING</p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm text-ink-700 leading-[1.9]">
+                            <p>
+                                運営ディレクター陣を中心に、作品のテーマ・使用楽曲（またはオリジナルメドレー）・目標とする映像トーンを決定します。
+                            </p>
+                            <ul class="text-xs sm:text-sm text-ink-500 space-y-1.5 list-disc list-inside">
+                                <li>楽曲のBPM・小節数・展開（イントロ〜アウトロ）を解析したタイムライン表の作成</li>
+                                <li>参加者募集要項の公開およびポートフォリオ選考・招待</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 02 -->
+                <div class="bg-surface-off border border-slate-200/90 p-7 sm:p-9 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-4 lg:pb-0 lg:pr-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs font-extrabold text-white bg-brand px-3 py-1">STEP 02</span>
+                                <span class="font-mono text-xs font-bold text-ink-500">WEEK 02</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-ink-900 mt-2">パート割り・繋ぎ設計</h3>
+                            <p class="font-mono text-[11px] text-brand mt-1">PART ASSIGNMENT & HANDOVER</p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm text-ink-700 leading-[1.9]">
+                            <p>
+                                参加メンバーの希望や得意表現を踏まえて担当パート（1パートあたり約10秒〜25秒）を確定し、制作レギュレーションを配布します。
+                            </p>
+                            <ul class="text-xs sm:text-sm text-ink-500 space-y-1.5 list-disc list-inside">
+                                <li>各パート専用のガイド音源（カウント音付きWAV）とタイムコード表の配布</li>
+                                <li>隣り合う前後パート担当者同士での「カットイン（トランジション）演出」の事前打ち合わせ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 03 -->
+                <div class="bg-surface-off border border-slate-200/90 p-7 sm:p-9 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-4 lg:pb-0 lg:pr-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs font-extrabold text-white bg-brand px-3 py-1">STEP 03</span>
+                                <span class="font-mono text-xs font-bold text-ink-500">WEEK 03 - 04</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-ink-900 mt-2">各パート制作・中間チェック</h3>
+                            <p class="font-mono text-[11px] text-brand mt-1">PRODUCTION & CHECKPOINT</p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm text-ink-700 leading-[1.9]">
+                            <p>
+                                各自の制作環境（After Effects / AviUtl / AviUtl2 / YMM4 / CLIP STUDIO PAINT / Blender / CapCut 等）にて実制作を進めます。
+                            </p>
+                            <ul class="text-xs sm:text-sm text-ink-500 space-y-1.5 list-disc list-inside">
+                                <li>制作3週目末に「中間提出（ラフコンテ・仮動き動画）」を専用チャンネルで共有</li>
+                                <li>前後パートとの繋がり具合や視線誘導を全員で確認し、クオリティをブラッシュアップ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 04 -->
+                <div class="bg-surface-off border border-slate-200/90 p-7 sm:p-9 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-4 lg:pb-0 lg:pr-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs font-extrabold text-white bg-brand px-3 py-1">STEP 04</span>
+                                <span class="font-mono text-xs font-bold text-ink-500">WEEK 05</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-ink-900 mt-2">統合編集・コンポジット調整</h3>
+                            <p class="font-mono text-[11px] text-brand mt-1">COMPOSITE & MASTERING</p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm text-ink-700 leading-[1.9]">
+                            <p>
+                                全クリエイターから提出された本編素材をコンポジターがマスタータイムラインへ統合し、1本の作品としての完成度を高めます。
+                            </p>
+                            <ul class="text-xs sm:text-sm text-ink-500 space-y-1.5 list-disc list-inside">
+                                <li>パート境界線のトランジション補強、全体のカラーグレーディング調整</li>
+                                <li>効果音（SFX）・音圧マスタリングおよび全参加クリエイターのクレジットロール制作</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 05 -->
+                <div class="bg-surface-off border border-slate-200/90 p-7 sm:p-9 cut-card reveal-up">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <div class="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-4 lg:pb-0 lg:pr-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs font-extrabold text-white bg-ink-900 px-3 py-1">STEP 05</span>
+                                <span class="font-mono text-xs font-bold text-ink-500">WEEK 06</span>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-ink-900 mt-2">試写確認・プレミア公開</h3>
+                            <p class="font-mono text-[11px] text-brand mt-1">PREMIERE & ARCHIVE</p>
+                        </div>
+                        <div class="lg:col-span-8 space-y-3 text-sm text-ink-700 leading-[1.9]">
+                            <p>
+                                参加者全員による限定公開での最終試写（クレジット表記・映像不備の最終確認）を経て、各プラットフォームで一斉公開します。
+                            </p>
+                            <ul class="text-xs sm:text-sm text-ink-500 space-y-1.5 list-disc list-inside">
+                                <li>YouTube・niconicoでのプレミア公開および公式Xでのティザー告知</li>
+                                <li>公式サイトの「WORKS」アーカイブページへの掲載</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         4. TECHNICAL REGULATIONS / 共通制作レギュレーション
+    =========================================== -->
+    <section class="py-24 bg-surface-off border-b border-slate-200/80 bg-studio-dots">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10 reveal-up">
+            <div class="max-w-2xl mb-12">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>TECHNICAL SPECIFICATIONS</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    共通技術レギュレーション
+                </h2>
+                <p class="text-sm text-ink-500 mt-3">
+                    複数ソフト間での素材統合をスムーズに行うため、原則として以下の標準仕様で納品いただいています。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 映像仕様 -->
+                <div class="bg-white border border-slate-200/90 p-7 sm:p-8 cut-card">
+                    <div class="font-mono text-xs font-bold text-brand bg-brand-light inline-block px-3 py-1 mb-4">
+                        VIDEO SPECS / 映像納品仕様
+                    </div>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">解像度（通常PV）</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">1920 × 1080 px (16:9)</dd>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">解像度（Shorts）</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">1080 × 1920 px (9:16)</dd>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">フレームレート</dt>
+                            <dd class="font-mono text-brand font-bold">60 fps（固定フレームレート）</dd>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <dt class="font-bold text-ink-700">ファイル形式</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">MP4 (H.264 高ビットレート) / MOV</dd>
+                        </div>
+                    </dl>
+                </div>
+
+                <!-- イラスト・音声仕様 -->
+                <div class="bg-white border border-slate-200/90 p-7 sm:p-8 cut-card">
+                    <div class="font-mono text-xs font-bold text-brand bg-brand-light inline-block px-3 py-1 mb-4">
+                        ASSET & AUDIO / イラスト・音声仕様
+                    </div>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">イラスト納品形式</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">PSD（パーツ分け推奨） / 透過PNG</dd>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">カラーモード</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">RGB / sRGB（8bit以上）</dd>
+                        </div>
+                        <div class="flex justify-between py-2 border-b border-slate-100">
+                            <dt class="font-bold text-ink-700">音声納品形式</dt>
+                            <dd class="font-mono text-ink-900 font-semibold">WAV（48kHz / 24bit 非圧縮）</dd>
+                        </div>
+                        <div class="flex justify-between py-2">
+                            <dt class="font-bold text-ink-700">余白フレーム（のりしろ）</dt>
+                            <dd class="font-mono text-brand font-bold">前後 +15フレーム（0.25秒）推奨</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         5. FAQ / よくある質問（アコーディオンUI）
+    =========================================== -->
+    <section class="py-24 bg-surface-white border-b border-slate-200/80">
+        <div class="max-w-4xl mx-auto px-6 lg:px-10 reveal-up">
+            <div class="mb-12">
+                <div class="flex items-center gap-3 font-mono text-xs font-bold text-brand tracking-[0.2em] mb-3">
+                    <span class="w-6 h-[1.5px] bg-brand"></span>
+                    <span>FAQ</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-ink-900 tracking-tight">
+                    よくある質問
+                </h2>
+            </div>
+
+            <div class="border-t border-slate-200 divide-y divide-slate-200" id="faq-container">
+                <!-- FAQ 1 -->
+                <div class="faq-item py-5">
+                    <button type="button" class="faq-btn w-full flex items-center justify-between text-left gap-4 py-1 focus:outline-none group">
+                        <span class="text-sm sm:text-base font-extrabold text-ink-900 group-hover:text-brand transition-colors">
+                            Q. 合作への参加が初めてなのですが、応募しても大丈夫でしょうか？
+                        </span>
+                        <span class="faq-icon font-mono text-lg font-bold text-brand shrink-0">+</span>
+                    </button>
+                    <div class="faq-answer hidden pt-3 pr-8 text-sm text-ink-500 leading-[1.9]">
+                        はい、大歓迎です。Project CUT-INでは、技術レギュレーションやガイド音源の使い方をまとめたマニュアルを用意しているほか、運営ディレクターや経験豊富なメンバーがDiscord上で丁寧にサポートいたします。
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="faq-item py-5">
+                    <button type="button" class="faq-btn w-full flex items-center justify-between text-left gap-4 py-1 focus:outline-none group">
+                        <span class="text-sm sm:text-base font-extrabold text-ink-900 group-hover:text-brand transition-colors">
+                            Q. 使用する編集ソフトに指定はありますか？（AviUtlやスマホアプリでも可能ですか？）
+                        </span>
+                        <span class="faq-icon font-mono text-lg font-bold text-brand shrink-0">+</span>
+                    </button>
+                    <div class="faq-answer hidden pt-3 pr-8 text-sm text-ink-500 leading-[1.9]">
+                        ソフトの指定はありません。1920×1080（Shortsの場合は1080×1920）・60fpsのMP4またはMOV形式で書き出しが可能であれば、After Effects、AviUtl、AviUtl2、YMM4、CapCutなど、普段使い慣れているツールでご参加いただけます。
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="faq-item py-5">
+                    <button type="button" class="faq-btn w-full flex items-center justify-between text-left gap-4 py-1 focus:outline-none group">
+                        <span class="text-sm sm:text-base font-extrabold text-ink-900 group-hover:text-brand transition-colors">
+                            Q. 自分が担当したパートを、公開後に個人のSNSやポートフォリオに載せてもいいですか？
+                        </span>
+                        <span class="faq-icon font-mono text-lg font-bold text-brand shrink-0">+</span>
+                    </button>
+                    <div class="faq-answer hidden pt-3 pr-8 text-sm text-ink-500 leading-[1.9]">
+                        はい、本編のプレミア公開後であれば、ご自身の担当パートの単品動画やメイキング（ブレイクダウン）をX（旧Twitter）やYouTube、ポートフォリオサイトへ自由に掲載していただけます。
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="faq-item py-5">
+                    <button type="button" class="faq-btn w-full flex items-center justify-between text-left gap-4 py-1 focus:outline-none group">
+                        <span class="text-sm sm:text-base font-extrabold text-ink-900 group-hover:text-brand transition-colors">
+                            Q. 報酬や参加費用は発生しますか？
+                        </span>
+                        <span class="faq-icon font-mono text-lg font-bold text-brand shrink-0">+</span>
+                    </button>
+                    <div class="faq-answer hidden pt-3 pr-8 text-sm text-ink-500 leading-[1.9]">
+                        Project CUT-INの合作企画は、クリエイター同士の表現追求と作品制作を目的とした非営利の自主制作プロジェクトのため、参加費用の徴収および金銭的な報酬の発生は原則ございません（※有償の企業タイアップ案件等を企画する際は、事前に個別契約と報酬条件を明示いたします）。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 下部ナビゲーション -->
+            <div class="mt-16 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="index.html" class="w-full sm:w-auto px-8 py-4 bg-surface-off border border-slate-300 hover:border-ink-900 text-ink-900 font-mono text-xs font-bold tracking-[0.14em] cut-btn transition-colors text-center">
+                    ← BACK TO TOP / トップページへ戻る
+                </a>
+                <a href="index.html#join" class="w-full sm:w-auto px-8 py-4 bg-brand text-white font-mono text-xs font-bold tracking-[0.14em] cut-btn btn-cut-hover text-center shadow-sm">
+                    ENTRY / 合作プロジェクトに参加する →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         6. 共通フッター
+    =========================================== -->
+    <footer class="bg-surface-off py-14">
+        <div class="max-w-7xl mx-auto px-6 lg:px-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-6 h-6 bg-ink-900 flex items-center justify-center cut-btn">
+                            <div class="w-[2px] h-7 bg-brand-accent rotate-[28deg]"></div>
+                            <div class="w-[1.5px] h-7 bg-white rotate-[28deg] ml-0.5"></div>
+                        </div>
+                        <span class="font-extrabold tracking-tight text-lg text-ink-900">
+                            Project <span class="text-brand">CUT-IN</span>
+                        </span>
+                    </div>
+                    <p class="text-xs font-medium text-ink-500 mt-2">
+                        個性が交差する。その瞬間を創る。
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 text-xs font-bold text-ink-700">
+                    <a href="index.html" class="hover:text-brand transition-colors">TOP</a>
+                    <a href="mission.html" class="hover:text-brand transition-colors">MISSION</a>
+                    <a href="news.html" class="hover:text-brand transition-colors">NEWS</a>
+                    <a href="works.html" class="hover:text-brand transition-colors">WORKS</a>
+                    <a href="comment.html" class="hover:text-brand transition-colors">COMMENT</a>
+                    <a href="flow.html" class="text-brand">FLOW</a>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between text-xs text-ink-500 font-mono gap-2">
+                <p>&copy; 2026 Project CUT-IN.</p>
+                <p>COLLABORATIVE PV STUDIO // AICHI</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // モバイルメニュー開閉
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // スクロール出現アニメーション
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // FAQアコーディオン開閉
+            const faqBtns = document.querySelectorAll('.faq-btn');
+            faqBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.parentElement;
+                    const answer = item.querySelector('.faq-answer');
+                    const icon = item.querySelector('.faq-icon');
+                    const isHidden = answer.classList.contains('hidden');
+
+                    answer.classList.toggle('hidden');
+                    icon.textContent = isHidden ? '−' : '+';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

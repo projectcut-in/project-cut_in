@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 検索エンジンに載らないようにする設定 -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>CUT-IN CLOUD | メンバー専用ストレージ・制作ポータル</title>
+        <!-- ファビコン（タブのアイコン）の設定 -->
+    <link rel="icon" type="image/png" href="Project Cutin.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        ink: {
+                            950: '#0B0F17',
+                            900: '#161C27',
+                            700: '#333D4E',
+                            500: '#647084',
+                            300: '#9BA5B5',
+                        },
+                        surface: {
+                            white: '#FFFFFF',
+                            off: '#F7F8FA',
+                            subtle: '#EEF1F6',
+                        },
+                        brand: {
+                            DEFAULT: '#2B4C7E',
+                            hover: '#1E365C',
+                            light: '#F0F4FA',
+                            accent: '#3B66A5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F7F8FA;
+            color: #161C27;
+            letter-spacing: 0.025em;
+        }
+        .bg-studio-dots {
+            background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+            background-size: 28px 28px;
+        }
+        .cut-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+        }
+        .cut-btn {
+            clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- ==========================================
+         1. パスワードロック画面（初期表示）
+    =========================================== -->
+    <div id="lock-screen" class="fixed inset-0 z-50 bg-ink-950 flex items-center justify-center p-4 bg-studio-dots" style="background-color: #0B0F17;">
+        <div class="bg-white border border-slate-200 w-full max-w-md p-8 sm:p-10 cut-card shadow-2xl">
+            <!-- ロゴ -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-8 h-8 bg-ink-900 flex items-center justify-center cut-btn">
+                    <div class="w-[2px] h-10 bg-brand-accent rotate-[28deg]"></div>
+                    <div class="w-[1.5px] h-10 bg-white rotate-[28deg] ml-1"></div>
+                </div>
+                <div>
+                    <div class="font-extrabold tracking-tight text-lg text-ink-900 leading-none">
+                        Project <span class="text-brand">CUT-IN</span> CLOUD
+                    </div>
+                    <div class="font-mono text-[9px] text-ink-500 tracking-[0.2em] mt-1">MEMBERS ONLY STORAGE</div>
+                </div>
+            </div>
+
+            <div class="space-y-2 mb-6">
+                <div class="inline-flex items-center gap-2 font-mono text-[10px] font-bold text-brand bg-brand-light px-2.5 py-1">
+                    <span>RESTRICTED AREA // 関係者専用</span>
+                </div>
+                <h1 class="text-xl font-extrabold text-ink-900">
+                    メンバー認証パスワードを入力
+                </h1>
+                <p class="text-xs text-ink-500 leading-relaxed">
+                    運営Discordサーバーにて共有されている合言葉（パスワード）を入力してクラウドへアクセスしてください。
+                </p>
+            </div>
+
+            <!-- エラー表示 -->
+            <div id="auth-error" class="hidden mb-4 px-3.5 py-2.5 bg-red-50 border border-red-200 text-red-700 text-xs font-bold">
+                パスワードが正しくありません。再度ご確認ください。
+            </div>
+
+            <form id="unlock-form" class="space-y-4">
+                <div>
+                    <label for="cloud-password" class="block font-mono text-[11px] font-bold text-ink-700 mb-1.5">
+                        ACCESS PASSWORD
+                    </label>
+                    <input type="password" id="cloud-password" required placeholder="••••••••" autocomplete="current-password"
+                        class="w-full px-4 py-3 bg-surface-off border border-slate-300 text-ink-900 text-sm font-mono focus:outline-none focus:bg-white focus:border-brand transition-colors">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-brand hover:bg-ink-900 text-white font-mono text-xs font-bold tracking-[0.16em] cut-btn shadow-sm">
+                    UNLOCK CLOUD / ロック解除 →
+                </button>
+            </form>
+
+            <div class="mt-6 pt-5 border-t border-slate-200 flex items-center justify-between text-xs">
+                <a href="index.html" class="font-mono text-ink-500 hover:text-brand transition-colors">
+                    ← TOPページへ戻る
+                </a>
+                <span class="font-mono text-[10px] text-ink-300">SHA-256 PROTECTED</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         2. クラウドメイン画面（認証成功後に表示）
+    =========================================== -->
+    <div id="cloud-app" class="hidden flex-1 flex flex-col">
+        <!-- ヘッダー -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-6 lg:px-10 h-18 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-7 h-7 bg-ink-900 flex items-center justify-center cut-btn">
+                        <div class="w-[2px] h-8 bg-brand-accent rotate-[28deg]"></div>
+                        <div class="w-[1.5px] h-8 bg-white rotate-[28deg] ml-1"></div>
+                    </div>
+                    <div>
+                        <span class="font-extrabold tracking-tight text-base sm:text-lg text-ink-900">
+                            Project <span class="text-brand">CUT-IN</span> <span class="font-mono text-xs bg-ink-900 text-white px-2 py-0.5 ml-1">CLOUD</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="hidden sm:inline-block font-mono text-xs font-bold text-ink-500 hover:text-brand">
+                        OFFICIAL SITE ↗
+                    </a>
+                    <button type="button" id="lock-btn" class="px-4 py-2 bg-surface-off border border-slate-300 hover:border-ink-900 font-mono text-xs font-bold text-ink-700 cut-btn transition-colors">
+                        LOCK / ログアウト
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="max-w-7xl mx-auto px-6 lg:px-10 py-10 w-full flex-1 space-y-10">
+
+            <!-- プロジェクト概要＆外部大容量ストレージ連携バナー -->
+            <div class="bg-white border border-slate-200 p-6 sm:p-8 cut-card shadow-sm">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 font-mono text-[10px] font-bold text-brand bg-brand-light px-2.5 py-1 mb-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></span>
+                            <span>ACTIVE PROJECT // 2026 WINTER</span>
+                        </div>
+                        <h1 class="text-2xl font-extrabold text-ink-900">
+                            大型PV合作『HORIZON // 境界線』共有クラウド
+                        </h1>
+                        <p class="text-xs sm:text-sm text-ink-500 mt-1.5">
+                            共通音源・ロゴ素材・絵コンテのダウンロード、および各パートのWIP（途中経過）・完成データの提出が行えます。
+                        </p>
+                    </div>
+
+                    <!-- 大容量データ用外部ストレージリンク（Google Drive等） -->
+                    <div class="flex flex-wrap gap-3 shrink-0">
+                        <a href="https://drive.google.com/" target="_blank" rel="noopener noreferrer"
+                           class="px-5 py-3 bg-brand hover:bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn flex items-center gap-2">
+                            <span>GOOGLE DRIVE (大容量提出用)</span>
+                            <span>↗</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 制作レギュレーション早見表 -->
+                <div class="mt-6 pt-5 border-t border-slate-200 grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono text-xs">
+                    <div class="bg-surface-off p-3 border border-slate-200/80">
+                        <div class="text-[10px] text-ink-500">RESOLUTION</div>
+                        <div class="font-bold text-ink-900 mt-0.5">1920 × 1080 (FHD)</div>
+                    </div>
+                    <div class="bg-surface-off p-3 border border-slate-200/80">
+                        <div class="text-[10px] text-ink-500">FRAME RATE</div>
+                        <div class="font-bold text-brand mt-0.5">60.00 FPS 固定</div>
+                    </div>
+                    <div class="bg-surface-off p-3 border border-slate-200/80">
+                        <div class="text-[10px] text-ink-500">VIDEO FORMAT</div>
+                        <div class="font-bold text-ink-900 mt-0.5">MP4 (H.264) / ProRes</div>
+                    </div>
+                    <div class="bg-surface-off p-3 border border-slate-200/80">
+                        <div class="text-[10px] text-ink-500">NEXT DEADLINE</div>
+                        <div class="font-bold text-ink-900 mt-0.5">2026.12.20 (WIP提出)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2カラム構成：左（ファイルアップロード＆共有ファイル一覧）／右（パート割り・進行状況） -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                <!-- 左カラム（7）：ファイルストレージ -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- ドラッグ＆ドロップ アップロードボックス -->
+                    <div class="bg-white border border-slate-200 p-6 cut-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="font-mono text-xs font-bold text-ink-900 tracking-wider">
+                                QUICK UPLOAD / クイックファイル共有（ローカル保存）
+                            </h2>
+                            <span class="font-mono text-[10px] text-ink-500">絵コンテ・参考画像・テキスト等</span>
+                        </div>
+
+                        <label id="drop-zone" class="border-2 border-dashed border-slate-300 hover:border-brand bg-surface-off hover:bg-brand-light/50 transition-colors p-6 flex flex-col items-center justify-center text-center cursor-pointer">
+                            <svg class="w-8 h-8 text-brand mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            <span class="text-xs sm:text-sm font-bold text-ink-900">
+                                クリックしてファイルを選択、またはここにドラッグ＆ドロップ
+                            </span>
+                            <span class="font-mono text-[10px] text-ink-500 mt-1">
+                                ※動画本編（100MB超）は右上のGoogle Driveへアップロードしてください
+                            </span>
+                            <input type="file" id="file-input" class="hidden" multiple>
+                        </label>
+                    </div>
+
+                    <!-- 共有ファイル一覧 -->
+                    <div class="bg-white border border-slate-200 p-6 cut-card">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-200">
+                            <h2 class="font-mono text-xs font-bold text-ink-900 tracking-wider">
+                                SHARED ASSETS / 配布素材・共有ファイル一覧
+                            </h2>
+                            <div class="flex gap-1.5" id="cloud-folder-tabs">
+                                <button type="button" data-folder="all" class="folder-tab active px-2.5 py-1 bg-ink-900 text-white font-mono text-[10px] font-bold">ALL</button>
+                                <button type="button" data-folder="MASTER" class="folder-tab px-2.5 py-1 bg-surface-off text-ink-700 font-mono text-[10px] font-bold">配布素材</button>
+                                <button type="button" data-folder="UPLOAD" class="folder-tab px-2.5 py-1 bg-surface-off text-ink-700 font-mono text-[10px] font-bold">メンバー追加</button>
+                            </div>
+                        </div>
+
+                        <div id="file-list" class="divide-y divide-slate-200">
+                            <!-- JSでファイル一覧を生成 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右カラム（5）：パート別進行状況リスト -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white border border-slate-200 p-6 cut-card">
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
+                            <h2 class="font-mono text-xs font-bold text-ink-900 tracking-wider">
+                                TIMELINE STATUS / パート担当・提出状況
+                            </h2>
+                            <span class="font-mono text-[10px] font-bold text-brand">6 PARTS</span>
+                        </div>
+
+                        <div class="space-y-3 text-xs">
+                            <div class="p-3.5 bg-surface-off border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="font-mono text-[10px] text-ink-500">0:00 - 0:28 // INTRO</div>
+                                    <div class="font-bold text-ink-900 mt-0.5">担当：KAI</div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold">WIP提出済</span>
+                            </div>
+
+                            <div class="p-3.5 bg-surface-off border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="font-mono text-[10px] text-ink-500">0:28 - 0:55 // VERSE A</div>
+                                    <div class="font-bold text-ink-900 mt-0.5">担当：Ryo-ta</div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-blue-100 text-brand font-mono text-[10px] font-bold">制作中</span>
+                            </div>
+
+                            <div class="p-3.5 bg-surface-off border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="font-mono text-[10px] text-ink-500">0:55 - 1:25 // PRE-CHORUS</div>
+                                    <div class="font-bold text-ink-900 mt-0.5">担当：Mina_MG</div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-blue-100 text-brand font-mono text-[10px] font-bold">制作中</span>
+                            </div>
+
+                            <div class="p-3.5 bg-surface-off border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="font-mono text-[10px] text-ink-500">1:25 - 2:05 // CHORUS 1</div>
+                                    <div class="font-bold text-ink-900 mt-0.5">担当：朔夜 × 影狼</div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold">線画完了</span>
+                            </div>
+
+                            <div class="p-3.5 bg-surface-off border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <div class="font-mono text-[10px] text-ink-500">2:05 - 2:50 // BRIDGE</div>
+                                    <div class="font-bold text-ink-900 mt-0.5">担当：募集枠（調整中）</div>
+                                </div>
+                                <span class="px-2.5 py-1 bg-slate-200 text-ink-700 font-mono text-[10px] font-bold">募集中</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         JavaScript（SHA-256認証 ＆ クラウドファイル管理）
+    =========================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // =========================================================================
+            // ★パスワード設定（GitHub公開対策：生のパスワードではなくSHA-256ハッシュを保存）
+            // 現在の設定パスワードは「cutin2026」です。
+            // 変更したい場合は、ブラウザのコンソールで hashText("新しいパスワード") を実行し、
+            // 出力された64文字の文字列に置き換えてください。
+            // =========================================================================
+            const VALID_PASSWORD_HASH = "e368265c9615072578283e72b9694f3a0018a748148d0475c83c022a1b435897";
+            const SESSION_KEY = "cutin_cloud_unlocked";
+
+            const lockScreen = document.getElementById('lock-screen');
+            const cloudApp = document.getElementById('cloud-app');
+            const unlockForm = document.getElementById('unlock-form');
+            const passwordInput = document.getElementById('cloud-password');
+            const authError = document.getElementById('auth-error');
+            const lockBtn = document.getElementById('lock-btn');
+
+            // 文字列をSHA-256ハッシュに変換する関数
+            async function hashText(text) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(text);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+            // コンソールから新しいハッシュを生成できるように公開
+            window.generatePasswordHash = async (newPass) => {
+                const h = await hashText(newPass);
+                console.log("新しいハッシュ値:", h);
+                return h;
+            };
+
+            function unlockCloud() {
+                lockScreen.classList.add('hidden');
+                cloudApp.classList.remove('hidden');
+                sessionStorage.setItem(SESSION_KEY, "true");
+            }
+
+            function lockCloud() {
+                sessionStorage.removeItem(SESSION_KEY);
+                cloudApp.classList.add('hidden');
+                lockScreen.classList.remove('hidden');
+                passwordInput.value = '';
+            }
+
+            // セッション中は再入力不要にする
+            if (sessionStorage.getItem(SESSION_KEY) === "true") {
+                unlockCloud();
+            }
+
+            unlockForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                authError.classList.add('hidden');
+
+                const inputVal = passwordInput.value;
+                const hashed = await hashText(inputVal);
+
+                if (hashed === VALID_PASSWORD_HASH) {
+                    unlockCloud();
+                } else {
+                    authError.classList.remove('hidden');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
+
+            lockBtn.addEventListener('click', lockCloud);
+
+            // =========================================================================
+            // クラウドファイル一覧・アップロード管理
+            // =========================================================================
+            const defaultFiles = [
+                {
+                    id: 1,
+                    folder: "MASTER",
+                    name: "HORIZON_Master_Audio_BPM174.wav",
+                    size: "38.4 MB",
+                    date: "2026.11.15",
+                    author: "運営 / SOUND TEAM",
+                    url: "#"
+                },
+                {
+                    id: 2,
+                    folder: "MASTER",
+                    name: "Project_CUT-IN_Official_Logo_Kit.zip",
+                    size: "12.1 MB",
+                    date: "2026.11.15",
+                    author: "KAI",
+                    url: "#"
+                },
+                {
+                    id: 3,
+                    folder: "MASTER",
+                    name: "HORIZON_Part_Sheet_&_Guide.pdf",
+                    size: "2.4 MB",
+                    date: "2026.11.16",
+                    author: "KAI",
+                    url: "#"
+                }
+            ];
+
+            let uploadedFiles = JSON.parse(localStorage.getItem('cutin_cloud_files') || '[]');
+            let currentFolder = 'all';
+
+            const fileListEl = document.getElementById('file-list');
+            const folderTabs = document.querySelectorAll('.folder-tab');
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('file-input');
+
+            function renderFiles() {
+                const allFiles = [...uploadedFiles, ...defaultFiles];
+                const filtered = currentFolder === 'all' ? allFiles : allFiles.filter(f => f.folder === currentFolder);
+
+                fileListEl.innerHTML = '';
+                if (filtered.length === 0) {
+                    fileListEl.innerHTML = `<div class="py-8 text-center text-xs text-ink-500 font-mono">ファイルはまだありません</div>`;
+                    return;
+                }
+
+                filtered.forEach(file => {
+                    const row = document.createElement('div');
+                    row.className = 'py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-off px-2 transition-colors';
+
+                    const badgeColor = file.folder === 'MASTER' ? 'bg-ink-900 text-white' : 'bg-brand-light text-brand';
+                    const badgeText = file.folder === 'MASTER' ? '配布素材' : '追加ファイル';
+
+                    row.innerHTML = `
+                        <div class="flex items-start sm:items-center gap-3 min-w-0">
+                            <span class="font-mono text-[10px] font-bold px-2 py-0.5 shrink-0 ${badgeColor}">${badgeText}</span>
+                            <div class="min-w-0">
+                                <div class="text-xs sm:text-sm font-bold text-ink-900 truncate">${file.name}</div>
+                                <div class="font-mono text-[10px] text-ink-500 mt-0.5">
+                                    ${file.size} / ${file.date} / UP: ${file.author}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                            <a href="${file.url}" download="${file.name}" class="px-3 py-1.5 bg-white border border-slate-300 hover:border-brand text-ink-900 hover:text-brand font-mono text-[10px] font-bold cut-btn">
+                                DOWNLOAD ↓
+                            </a>
+                            ${file.folder === 'UPLOAD' ? `<button type="button" data-del-id="${file.id}" class="del-file-btn px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-600 hover:text-white font-mono text-[10px] font-bold">削除</button>` : ''}
+                        </div>
+                    `;
+                    fileListEl.appendChild(row);
+                });
+
+                document.querySelectorAll('.del-file-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = Number(btn.dataset.delId);
+                        uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+                        localStorage.setItem('cutin_cloud_files', JSON.stringify(uploadedFiles));
+                        renderFiles();
+                    });
+                });
+            }
+
+            renderFiles();
+
+            folderTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    folderTabs.forEach(t => {
+                        t.classList.remove('active', 'bg-ink-900', 'text-white');
+                        t.classList.add('bg-surface-off', 'text-ink-700');
+                    });
+                    tab.classList.add('active', 'bg-ink-900', 'text-white');
+                    tab.classList.remove('bg-surface-off', 'text-ink-700');
+                    currentFolder = tab.dataset.folder;
+                    renderFiles();
+                });
+            });
+
+            function handleFiles(files) {
+                Array.from(files).forEach(file => {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+                    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+                    const blobUrl = URL.createObjectURL(file);
+
+                    uploadedFiles.unshift({
+                        id: Date.now() + Math.random(),
+                        folder: "UPLOAD",
+                        name: file.name,
+                        size: sizeMB,
+                        date: today,
+                        author: "Member",
+                        url: blobUrl
+                    });
+                });
+                // メタ情報を保存
+                const storable = uploadedFiles.map(f => ({ ...f, url: '#' }));
+                localStorage.setItem('cutin_cloud_files', JSON.stringify(storable));
+                renderFiles();
+            }
+
+            fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-brand', 'bg-brand-light');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-brand', 'bg-brand-light');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-brand', 'bg-brand-light');
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
