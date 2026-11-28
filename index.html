@@ -132,6 +132,26 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #2B4C7E;
         }
+        /* 右端の外側から左端へきれいに流すアニメーション */
+@keyframes marquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.animate-marquee {
+    display: inline-block;
+    white-space: nowrap;
+    /* スピードを変更したい場合はここの「25s」の数字を調整してください */
+    animation: marquee 20s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}
     </style>
 </head>
 <body class="bg-surface-white text-ink-900 font-sans antialiased selection:bg-brand selection:text-white">
@@ -188,14 +208,39 @@
         </div>
     </header>
 
+<!-- ==========================================
+     お知らせテロップバー（レスポンシブ対応版）
+=========================================== -->
+<div id="notice-banner-wrapper" class="fixed top-20 left-0 right-0 z-30 hidden bg-brand text-white text-xs font-medium px-3 sm:px-4 py-2 border-b border-brand-hover shadow-sm transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+        
+        <!-- 左側：NOTICEラベル ＋ 流れるテキストのエリア -->
+        <div class="flex items-center gap-2.5 sm:gap-3 overflow-hidden flex-1 min-w-0">
+            <span class="px-2 py-0.5 bg-white/20 font-mono text-[9px] sm:text-[10px] font-bold tracking-wider shrink-0 rounded-sm">
+                NOTICE
+            </span>
+            <!-- 枠いっぱいに広げて右端から流すためのコンテナ -->
+            <div class="overflow-hidden w-full relative">
+                <div id="notice-content-area" class="animate-marquee font-sans text-[15px] tracking-wide">
+                    <!-- notice.txtの内容 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 右側の閉じるボタン -->
+        <button id="close-notice-btn" class="text-white/80 hover:text-white shrink-0 p-1 focus:outline-none" aria-label="お知らせを閉じる">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+</div>
+
     <!-- ==========================================
      2. ヒーローセクション（背景動画 16:9 ＆ 左から中央へ溶ける白グラデーション）
 =========================================== -->
 <section class="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-white">
     <!-- 背景動画コンテナ（16:9を維持しながら全体をカバー） -->
     <div class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <video src="hero-pv.mp4" autoplay loop muted playsinline 
-               class="absolute top-1/2 left-1/2 w-[177.77777778vh] h-[56.25vw] min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover">
+        <video src="hero-pv.mp4" autoplay loop muted playsinline preload="auto" x5-playsinline webkit-playsinline class="w-full h-full object-cover pointer-events-none">
         </video>
 
         <!-- 左半分は白く、中央に向かって透明になるグラデーションオーバーレイ（PC用） -->
@@ -723,43 +768,77 @@
             </div>
         </div>
     </div>
-
-    <!-- ==========================================
-         NEWS詳細モーダル（NEWS記事クリック時に表示）※新規追加
-    =========================================== -->
-    <div id="news-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
-        <div class="bg-white border border-slate-200 w-full max-w-2xl cut-card shadow-2xl relative overflow-hidden">
-            <div class="bg-surface-off border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-3 font-mono text-xs font-bold">
-                    <span id="news-modal-date" class="text-ink-500">2026.11.15</span>
-                    <span id="news-modal-cat" class="px-2.5 py-0.5 bg-brand text-white text-[10px]">RECRUIT</span>
-                </div>
-                <button id="close-news-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+<!-- ==========================================
+     NEWS詳細モーダル（スクロール対応版）
+=========================================== -->
+<div id="news-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-ink-950/70 backdrop-blur-sm">
+    <div class="bg-white border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col cut-card shadow-2xl relative">
+        <div class="bg-surface-off border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3 font-mono text-xs font-bold">
+                <span id="news-modal-date" class="text-ink-500">2026.11.15</span>
+                <span id="news-modal-cat" class="px-2.5 py-0.5 bg-brand text-white text-[10px]">RECRUIT</span>
             </div>
-            <div class="p-6 sm:p-8 space-y-5">
-                <h3 id="news-modal-title" class="text-xl sm:text-2xl font-extrabold text-ink-900 leading-snug">
-                    ニュースタイトル
-                </h3>
-                <div class="h-[1px] w-full bg-slate-200"></div>
-                <p id="news-modal-body" class="text-ink-700 text-sm leading-[2] whitespace-pre-line">
-                    ニュース本文
-                </p>
-                <div class="pt-4 flex justify-end">
-                    <button type="button" id="news-modal-ok-btn" class="px-6 py-2.5 bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-brand transition-colors">
-                        CLOSE / 閉じる
-                    </button>
-                </div>
-            </div>
+            <button id="close-news-modal-btn" class="text-ink-500 hover:text-ink-900 p-1 focus:outline-none transition-colors" aria-label="閉じる">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <!-- スクロール可能な本文エリア -->
+        <div class="p-6 sm:p-8 space-y-5 overflow-y-auto">
+            <h3 id="news-modal-title" class="text-xl sm:text-2xl font-extrabold text-ink-900 leading-snug">
+                ニュースタイトル
+            </h3>
+            <div class="h-[1px] w-full bg-slate-200"></div>
+            <p id="news-modal-body" class="text-ink-700 text-sm leading-[2] whitespace-pre-line">
+                ニュース本文
+            </p>
+        </div>
+        <div class="bg-surface-off border-t border-slate-200 px-6 py-4 flex justify-end shrink-0">
+            <button type="button" id="news-modal-ok-btn" class="px-6 py-2.5 bg-ink-900 text-white font-mono text-xs font-bold tracking-wider cut-btn hover:bg-brand transition-colors">
+                CLOSE / 閉じる
+            </button>
         </div>
     </div>
+</div>
 
     <!-- ==========================================
          JavaScript（インタラクション・Canvas演出・データ管理）
     =========================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // ==========================================
+// お知らせテロップ（notice.html読み込み＆非表示制御）
+// ==========================================
+const noticeWrapper = document.getElementById('notice-banner-wrapper');
+const noticeContentArea = document.getElementById('notice-content-area');
+const closeNoticeBtn = document.getElementById('close-notice-btn');
+
+// ローカルストレージでユーザーが閉じているか確認
+const isNoticeClosed = localStorage.getItem('cutin_notice_closed');
+
+if (!isNoticeClosed) {
+    fetch('notice.txt')
+    .then(response => {
+        if (!response.ok) throw new Error('Not found');
+        return response.text();
+    })
+    .then(text => {
+        const trimmed = text.trim();
+        if (trimmed.length > 0) {
+            noticeContentArea.innerHTML = trimmed;
+            noticeWrapper.classList.remove('hidden');
+        }
+    })
+    .catch(() => {
+        // notice.txtが存在しない場合は非表示のまま
+    });
+}
+
+if (closeNoticeBtn) {
+    closeNoticeBtn.addEventListener('click', () => {
+        noticeWrapper.classList.add('hidden');
+        localStorage.setItem('cutin_notice_closed', 'true');
+    });
+}
             
             // 2. モバイルメニュー開閉
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
