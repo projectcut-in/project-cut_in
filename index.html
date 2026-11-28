@@ -240,8 +240,7 @@
 <section class="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-white">
     <!-- 背景動画コンテナ（16:9を維持しながら全体をカバー） -->
     <div class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <video src="hero-pv.mp4" autoplay loop muted playsinline preload="auto" x5-playsinline webkit-playsinline class="w-full h-full object-cover pointer-events-none">
-        </video>
+        <video id="hero-video" src="hero-pv.mp4" autoplay loop muted playsinline preload="auto" x5-playsinline webkit-playsinline class="w-full h-full object-cover pointer-events-none"></video>
 
         <!-- 左半分は白く、中央に向かって透明になるグラデーションオーバーレイ（PC用） -->
         <div class="hidden lg:block absolute inset-0 bg-gradient-to-r from-white from-81% via-white/85 via-55% to-transparent to-85%"></div>
@@ -805,6 +804,14 @@
     =========================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // モバイルブラウザでの自動再生ブロックを強制解除して再生させる
+const heroVideo = document.getElementById('hero-video');
+if (heroVideo) {
+    heroVideo.play().catch(error => {
+        // 何らかの理由で自動再生がブロックされた場合のフォールバック
+        console.log("Autoplay was prevented:", error);
+    });
+}
             // ==========================================
 // お知らせテロップ（notice.html読み込み＆非表示制御）
 // ==========================================
